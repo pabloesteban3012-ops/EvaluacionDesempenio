@@ -1,27 +1,24 @@
 import { createClient } from '@supabase/supabase-js';
-import { buffer } from 'micro';
 
-const supabaseUrl = 'https://pabloesteban2012opscghnwjgzx.supabase.co';
-const supabaseKey = process.env.SUPABASE_ANON_KEY || 'TU_ANON_KEY';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// ✅ Desactiva body parsing automático
-export const config = {
-  api: {
-    bodyParser: false
-  }
-};
+const supabase = createClient(
+  'https://pabloesteban2012opscghnwjgzx.supabase.co',
+  'sb_secret_IHZEmHEKirA38YlyRCy4og_Uqb9U8-V'
+);
 
 export default async function handler(req, res) {
-  // 🔧 LEE RAW BODY con micro
-  const rawBody = await buffer(req);
-  const body = JSON.parse(rawBody.toString());
+  // CORS primero
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-  console.log('Raw body recibido:', body);
+  if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Solo POST' });
+  // Raw body manual (Vercel fix)
+  let body;
+  try {
+    body = req.body ? JSON.parse(req.body) : {};
+  } catch {
+    return res.status(400).json({ error: 'JSON inválido', body: req.body });
   }
 
   try {
@@ -34,6 +31,7 @@ export default async function handler(req, res) {
     if (error) throw error;
     res.status(200).json({ success: true, id: data.id });
   } catch (error) {
+    console.error('Error completo:', error);
     res.status(500).json({ error: error.message });
   }
 }
