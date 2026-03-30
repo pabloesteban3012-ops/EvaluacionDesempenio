@@ -1,12 +1,7 @@
 {
-  "name": "evaluacion-aris",
-  "version": "1.0.0",
-  "private": true,
   "type": "module",
   "engines": {
     "node": "22.x"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.45.4"
-  }
+  "dependencies": {}
 }
