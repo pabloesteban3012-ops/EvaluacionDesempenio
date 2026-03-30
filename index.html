@@ -742,10 +742,11 @@ function resetForm() {
   document.getElementById('observaciones').value = '';
 }
 
-function enviarEvaluacion() {
+async function enviarEvaluacion() {
   const nombre = document.getElementById('provNombre').value.trim();
   const nit = document.getElementById('provNIT').value.trim();
   const periodo = document.getElementById('provPeriodo').value;
+  const operacion = document.getElementById('provOperacion').value; 
   const score = calcularTotal();
   if (!nombre || !nit || !periodo) {
     alert('Por favor completa los datos del proveedor, período y operación.');
@@ -756,7 +757,35 @@ function enviarEvaluacion() {
     return;
   }
   const res = getConcepto(score);
-  alert(`✓ Evaluación lista para guardar\n\nProveedor: ${nombre}\nCalificación: ${score.toFixed(2)} — ${res.concepto} (Tipo ${res.tipo})\n\n[Aquí se conectaría con Supabase]`);
+  try {
+    const response = await fetch('/api/guardar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        proveedor_nombre: nombre,
+        nit: nit,
+        periodo: periodo,
+        operacion: operacion,
+        tipo: tipoActual,
+        contratos: ocs,
+        calificacion_total: score,
+        concepto: res.concepto,
+        tipo_calificacion: res.tipo,
+        criterios: notas,
+        observaciones: document.getElementById('observaciones').value
+      })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      alert(`✅ ${result.message}\nID: ${result.id}`);
+      resetForm();
+    } else {
+      alert('Error: ' + result.error);
+    }
+  } catch (error) {
+    alert('Sin conexión: ' + error.message);
+  }
 }
 
 // Init
