@@ -1,8 +1,7 @@
 {
   "functions": {
     "api/guardar.js": {
-      "memory": 1024,
-      "maxDuration": 30
+      "runtime": "nodejs22.x"
     }
   }
 }
