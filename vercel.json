@@ -1,1 +1,7 @@
-{}
+{
+  "functions": {
+    "api/guardar.js": {
+      "runtime": "@vercel/node@4"
+    }
+  }
+}
