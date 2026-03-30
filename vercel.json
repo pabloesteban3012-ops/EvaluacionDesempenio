@@ -1,7 +1,8 @@
 {
   "functions": {
     "api/guardar.js": {
-      "runtime": "@vercel/node@4"
+      "memory": 1024,
+      "maxDuration": 30
     }
   }
 }
