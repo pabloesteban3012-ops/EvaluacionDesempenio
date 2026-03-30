@@ -1,0 +1,36 @@
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://pabloesteban2012opscghnwjgzx.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+export default async function handler(req, res) {
+  // CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Solo POST' });
+
+  try {
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const body = await req.json();
+    
+    const { data, error } = await supabase
+      .from('evaluaciones')
+      .insert([body])
+      .select('id, created_at')
+      .single();
+
+    if (error) throw error;
+
+    res.status(200).json({
+      success: true,
+      id: data.id,
+      message: 'Evaluación guardada'
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+}
