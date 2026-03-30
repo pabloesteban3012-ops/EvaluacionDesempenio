@@ -1,36 +1,52 @@
 import { createClient } from '@supabase/supabase-js';
 
-
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
-  throw new Error('Faltan variables de entorno de Supabase');
-}
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY,
-  {
-    auth: { autoRefreshToken: false, persistSession: false }, 
-    global: { headers: { 'X-Client-Info': 'guardar-api' } }
-  }
-);
-
-
 export const config = {
   api: {
-    bodyParser: { sizeLimit: '500kb' }, // Previene DoS por memoria
+    bodyParser: { sizeLimit: '500kb' },
   },
 };
 
 export default async function handler(req, res) {
-  // Headers CORS seguros
+  // ✅ MOVER: Validar env vars DENTRO del handler (no en module scope)
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY;
+
+  // 🚨 LOG DE DEBUG (verás esto en vercel logs)
+  console.log('[guardar.js] Env vars check:', {
+    urlPresent: !!supabaseUrl,
+    urlLength: supabaseUrl?.length || 0,
+    keyPresent: !!supabaseKey,
+    keyLength: supabaseKey?.length || 0,
+    nodeEnv: process.env.NODE_ENV
+  });
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('[guardar.js] FALTAN ENV VARS:', {
+      url: supabaseUrl ? 'OK' : 'MISSING',
+      key: supabaseKey ? 'OK' : 'MISSING'
+    });
+    return res.status(500).json({ 
+      error: 'Configuración del servidor incompleta',
+      code: 'MISSING_ENV'
+    });
+  }
+
+  // ✅ Crear cliente DENTRO del handler
+  const supabase = createClient(supabaseUrl, supabaseKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+    global: { headers: { 'X-Client-Info': 'guardar-api' } }
+  });
+
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Content-Type', 'application/json');
   
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
 
-  // Timeout global (evita colgas por Supabase lento)
+  // Timeout
   const timeout = setTimeout(() => {
     if (!res.headersSent) {
       console.error('[guardar.js] Timeout excedido');
@@ -39,39 +55,30 @@ export default async function handler(req, res) {
   }, 25000);
 
   try {
-    // Body parsing robusto con validación
+    // Body parsing
     let body = {};
     if (req.body) {
       try {
-        const raw = typeof req.body === 'string' ? req.body : req.body.toString();
-        body = JSON.parse(raw);
+        const raw = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+        body = typeof req.body === 'object' ? req.body : JSON.parse(raw);
       } catch (parseError) {
         clearTimeout(timeout);
         console.warn('[guardar.js] JSON inválido:', parseError.message);
-        return res.status(400).json({ error: 'JSON inválido', details: parseError.message });
+        return res.status(400).json({ error: 'JSON inválido' });
       }
     }
 
-    // Validación de schema básico (evita inserts corruptos)
+    // Validación básica
     if (!body || typeof body !== 'object' || Array.isArray(body)) {
       clearTimeout(timeout);
       return res.status(400).json({ error: 'El body debe ser un objeto JSON' });
     }
 
-    // Campos críticos (ajusta según tu tabla)
-    const camposRequeridos = ['evaluador', 'fecha']; // Ejemplo
-    for (const campo of camposRequeridos) {
-      if (body[campo] === undefined || body[campo] === null) {
-        clearTimeout(timeout);
-        return res.status(400).json({ error: `Campo requerido faltante: ${campo}` });
-      }
-    }
-
-    // Insert con manejo explícito de errores de Supabase
+    // Insert en Supabase
     const { data, error } = await supabase
       .from('evaluaciones')
       .insert([body])
-      .select('id') // Solo trae lo necesario (reduce payload)
+      .select('id')
       .single();
 
     if (error) {
@@ -82,17 +89,9 @@ export default async function handler(req, res) {
         details: error.details
       });
 
-      // Mapeo de errores comunes de Supabase
-      if (error.code === '23505') { // Violación de unique constraint
-        return res.status(409).json({ error: 'Registro duplicado', code: 'DUPLICATE' });
-      }
-      if (error.code === '23503') { // Violación de foreign key
-        return res.status(400).json({ error: 'Referencia inválida', code: 'FOREIGN_KEY' });
-      }
-      if (error.code === 'PGRST301') { // Resource not found
-        return res.status(404).json({ error: 'Tabla no encontrada', code: 'NOT_FOUND' });
-      }
-
+      if (error.code === '23505') return res.status(409).json({ error: 'Registro duplicado' });
+      if (error.code === '23503') return res.status(400).json({ error: 'Referencia inválida' });
+      
       throw error;
     }
 
@@ -106,16 +105,12 @@ export default async function handler(req, res) {
 
   } catch (error) {
     clearTimeout(timeout);
-    
-    // Logging estructurado (no expongas stack en prod)
     console.error('[guardar.js] Error crítico:', {
       message: error.message,
       code: error.code || 'INTERNAL_ERROR',
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-      timestamp: new Date().toISOString()
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
 
-    // Respuesta segura al cliente
     const isClientError = error.status >= 400 && error.status < 500;
     return res.status(isClientError ? error.status : 500).json({
       error: isClientError ? error.message : 'Error interno del servidor',
