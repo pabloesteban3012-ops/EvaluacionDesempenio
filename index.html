@@ -748,7 +748,7 @@ async function enviarEvaluacion() {
   const periodo = document.getElementById('provPeriodo').value;
   const operacion = document.getElementById('provOperacion').value; 
   const score = calcularTotal();
-  if (!nombre || !nit || !periodo) {
+  if (!nombre || !nit || !periodo || !operacion) {
     alert('Por favor completa los datos del proveedor, período y operación.');
     return;
   }
