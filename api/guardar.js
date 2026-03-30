@@ -9,7 +9,7 @@ export const config = {
 export default async function handler(req, res) {
   // ✅ MOVER: Validar env vars DENTRO del handler (no en module scope)
   const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_ANON_KEY;
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 
   // 🚨 LOG DE DEBUG (verás esto en vercel logs)
   console.log('[guardar.js] Env vars check:', {
