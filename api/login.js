@@ -6,7 +6,6 @@ export default async function handler(req, res) {
   const redirectUri = process.env.AZURE_AD_REDIRECT_URI
 
   const state = crypto.randomBytes(16).toString("hex")
-
   const url = new URL(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize`)
   url.searchParams.set("client_id", clientId)
   url.searchParams.set("response_type", "code")
@@ -16,6 +15,9 @@ export default async function handler(req, res) {
   url.searchParams.set("state", state)
   url.searchParams.set("prompt", "select_account")
 
-  res.setHeader("Set-Cookie", `oauth_state=${state}; HttpOnly; Path=/; SameSite=Lax; Max-Age=600`)
+  const isProd = process.env.VERCEL_ENV === "production"
+  const cookie = `oauth_state=${state}; Path=/; HttpOnly; Max-Age=600; SameSite=${isProd ? "None" : "Lax"}${isProd ? "; Secure" : ""}`
+
+  res.setHeader("Set-Cookie", cookie)
   return res.writeHead(302, { Location: url.toString() }).end()
 }
