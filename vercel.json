@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/", "destination": "/login.html" }
+  ],
   "functions": {
     "api/guardar.js": {
       "memory": 1024,
