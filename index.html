@@ -393,6 +393,7 @@
   </div>
   </div>
   <span class="header-code">F-COM-007/016/008</span>
+  <button class="btn-secondary" onclick="logout()">Cerrar sesión</button>
 </header>
 
 <main class="main">
@@ -724,6 +725,12 @@ async function enviarEvaluacion() {
     return;
   }
   const res = getConcepto(score);
+ const sesion = await fetch('/api/me');
+  if (!sesion.ok) {
+    alert('Debes iniciar sesión primero');
+    window.location.href = '/login.html';
+    return;
+  }
   try {
     const response = await fetch('/api/guardar', {
       method: 'POST',
@@ -758,6 +765,22 @@ async function enviarEvaluacion() {
 // Init
 renderCriterios();
 updateScore();
+
+ async function verificarLogin() {
+  const r = await fetch('/api/me');
+  if (!r.ok) {
+    window.location.href = '/login.html';
+    return;
+  }
+}
+
+async function logout() {
+  await fetch('/api/logout');
+  window.location.href = '/login.html';
+}
+
+window.addEventListener('load', verificarLogin);
+ 
 </script>
 </body>
 </html>
