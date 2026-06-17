@@ -468,7 +468,7 @@
 // ============================================================
 // CONFIGURACIÓN - Se carga desde /api/config
 // ============================================================
-let supabase = null;
+let supabaseClient = null;
 
 // ============================================================
 // CRITERIOS POR TIPO DE CONTRATO
@@ -533,35 +533,44 @@ let tipoActual = '';
 // ============================================================
 async function inicializar() {
   try {
-    // 1. Cargar config de Supabase desde el backend
+    console.log('1. Cargando config...');
     const configResp = await fetch('/api/config');
-    if (!configResp.ok) throw new Error('No se pudo cargar config');
+    console.log('Config status:', configResp.status);
+    
+    if (!configResp.ok) throw new Error('No se pudo cargar config: ' + configResp.status);
     const config = await configResp.json();
+    console.log('Config recibida');
 
-    // Inicializar Supabase
-    supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+    console.log('2. Inicializando Supabase...');
+    if (!window.supabase) {
+      throw new Error('Supabase JS no se cargó. Verifica la conexión a internet.');
+    }
+    supabaseClient = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+    console.log('Supabase inicializado');
 
-    // 2. Obtener usuario desde /api/me
+    console.log('3. Cargando /api/me...');
     const resp = await fetch('/api/me');
+    console.log('/api/me status:', resp.status);
+    
     if (!resp.ok) {
+      console.log('No autenticado, redirigiendo...');
       window.location.href = '/login.html';
       return;
     }
 
     usuarioActual = await resp.json();
+    console.log('Usuario:', usuarioActual);
 
-    // Mostrar nombre del usuario
     document.getElementById('userName').textContent = 
       usuarioActual.name || usuarioActual.user || usuarioActual.email || 'Usuario';
 
-    // 3. Cargar contratos desde Supabase
+    console.log('4. Cargando contratos...');
     await cargarContratos();
 
-    // Ocultar loading
     document.getElementById('loadingScreen').style.display = 'none';
 
   } catch (err) {
-    console.error('Error inicializando:', err);
+    console.error('ERROR en inicializar:', err);
     document.getElementById('loadingScreen').innerHTML = `
       <p style="color:var(--red)">Error: ${err.message}</p>
       <button class="btn-secondary" onclick="window.location.href='/login.html'">Ir al login</button>
@@ -583,7 +592,7 @@ async function cargarContratos() {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('v_mis_contratos')
       .select('*')
       .eq('correo_evaluador', correo)
@@ -630,17 +639,14 @@ function seleccionarContrato() {
   contratoSeleccionado = contratosData.find(c => c.id_contrato === id);
   if (!contratoSeleccionado) return;
 
-  // Auto-completar datos del proveedor
   document.getElementById('provNombre').value = contratoSeleccionado.razon_social || '';
   document.getElementById('provNIT').value = contratoSeleccionado.nit || '';
   document.getElementById('provPeriodo').value = contratoSeleccionado.periodo_evaluacion || '';
   document.getElementById('provOperacion').value = contratoSeleccionado.operacion || '';
 
-  // Mostrar tipo de contrato
   tipoActual = contratoSeleccionado.tipo_contrato;
   mostrarTipoContrato(tipoActual);
 
-  // Mostrar info del contrato
   document.getElementById('contratoInfo').innerHTML = `
     <strong>Contrato:</strong> ${contratoSeleccionado.codigo_contrato || ''}<br>
     <strong>Tipo:</strong> ${tipoActual || ''}<br>
@@ -648,10 +654,7 @@ function seleccionarContrato() {
   `;
   document.getElementById('contratoInfo').style.display = 'block';
 
-  // Mostrar formulario
   mostrarFormulario();
-
-  // Renderizar criterios
   renderCriterios();
   updateScore();
 }
@@ -797,7 +800,7 @@ function updateScore() {
 }
 
 // ============================================================
-// ENVIAR EVALUACIÓN - GUARDAR DIRECTO EN SUPABASE
+// ENVIAR EVALUACIÓN
 // ============================================================
 async function enviarEvaluacion() {
   if (!contratoSeleccionado) {
@@ -838,8 +841,7 @@ async function enviarEvaluacion() {
   };
 
   try {
-    // 1. Guardar evaluación
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('evaluaciones')
       .insert([payload])
       .select();
@@ -849,8 +851,7 @@ async function enviarEvaluacion() {
       throw error;
     }
 
-    // 2. Actualizar asignación a completado
-    const { error: updateError } = await supabase
+    const { error: updateError } = await supabaseClient
       .from('asignaciones')
       .update({ 
         estado_asignacion: 'completado',
@@ -864,7 +865,7 @@ async function enviarEvaluacion() {
 
     alert('Evaluación guardada exitosamente');
     resetForm();
-    cargarContratos(); // Recargar para quitar el contrato completado
+    cargarContratos();
 
   } catch (err) {
     console.error('Error guardando:', err);
@@ -893,7 +894,6 @@ async function logout() {
   window.location.href = '/login.html';
 }
 
-// Iniciar al cargar la página
 window.onload = inicializar;
 </script>
 
