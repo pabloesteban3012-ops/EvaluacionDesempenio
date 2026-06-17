@@ -1,3 +1,4 @@
+// api/callback.js
 export default async function handler(req, res) {
   const { code } = req.query
 
@@ -47,12 +48,12 @@ export default async function handler(req, res) {
     time: Date.now()
   })).toString("base64")
 
-  const isProd = process.env.VERCEL_ENV === "production"
-  const sessionCookie = `session=${sessionPayload}; Path=/; HttpOnly; Max-Age=86400; SameSite=${isProd ? "None" : "Lax"}${isProd ? "; Secure" : ""}`
+  // Cookie simple sin HttpOnly para probar
+  const sessionCookie = `session=${sessionPayload}; Path=/; Max-Age=86400; SameSite=Lax`
 
   res.setHeader("Set-Cookie", [
     sessionCookie,
-    `oauth_state=; Path=/; HttpOnly; Max-Age=0`,
+    `oauth_state=; Path=/; Max-Age=0`,
   ])
 
   return res.writeHead(302, { Location: "/" }).end()
