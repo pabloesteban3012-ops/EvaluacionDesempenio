@@ -357,7 +357,7 @@
   <p>Cargando tus contratos...</p>
 </div>
 
-<header class="header">
+<<header class="header">
   <div class="header-logo">
     <span>ARIS MINING</span>
   </div>
@@ -368,7 +368,7 @@
   </div>
 </header>
 
-<main class="main">
+<<main class="main">
 
   <!-- COMBOBOX DE CONTRATOS -->
   <div class="card" id="contratosCard" style="display:none;">
@@ -466,12 +466,9 @@
 
 <script>
 // ============================================================
-// CONFIGURACIÓN
+// CONFIGURACIÓN - Se carga desde /api/config
 // ============================================================
-const SUPABASE_URL = 'https://TU-PROYECTO.supabase.co';
-const SUPABASE_KEY = 'TU-ANON-KEY';
-
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabase = null;
 
 // ============================================================
 // CRITERIOS POR TIPO DE CONTRATO
@@ -532,15 +529,21 @@ let notas = {};
 let tipoActual = '';
 
 // ============================================================
-// INICIALIZACIÓN - OBTENER USUARIO DESDE /api/me
+// INICIALIZACIÓN
 // ============================================================
 async function inicializar() {
   try {
-    // 1. Obtener usuario desde tu API M365
-    const resp = await fetch('/api/me');
+    // 1. Cargar config de Supabase desde el backend
+    const configResp = await fetch('/api/config');
+    if (!configResp.ok) throw new Error('No se pudo cargar config');
+    const config = await configResp.json();
 
+    // Inicializar Supabase
+    supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+
+    // 2. Obtener usuario desde /api/me
+    const resp = await fetch('/api/me');
     if (!resp.ok) {
-      // No hay sesión, redirigir a login
       window.location.href = '/login.html';
       return;
     }
@@ -548,17 +551,21 @@ async function inicializar() {
     usuarioActual = await resp.json();
 
     // Mostrar nombre del usuario
-    document.getElementById('userName').textContent = usuarioActual.name || usuarioActual.email;
+    document.getElementById('userName').textContent = 
+      usuarioActual.name || usuarioActual.user || usuarioActual.email || 'Usuario';
 
-    // 2. Cargar contratos desde Supabase
+    // 3. Cargar contratos desde Supabase
     await cargarContratos();
 
     // Ocultar loading
     document.getElementById('loadingScreen').style.display = 'none';
 
   } catch (err) {
-    console.error('Error:', err);
-    window.location.href = '/login.html';
+    console.error('Error inicializando:', err);
+    document.getElementById('loadingScreen').innerHTML = `
+      <p style="color:var(--red)">Error: ${err.message}</p>
+      <button class="btn-secondary" onclick="window.location.href='/login.html'">Ir al login</button>
+    `;
   }
 }
 
@@ -566,15 +573,26 @@ async function inicializar() {
 // CARGAR CONTRATOS DESDE SUPABASE
 // ============================================================
 async function cargarContratos() {
-  const correo = usuarioActual.email;
+  const correo = usuarioActual.email || usuarioActual.user;
+
+  if (!correo) {
+    console.error('No se encontró email del usuario');
+    document.getElementById('contratoSelect').innerHTML = '<option value="">Error: sin email de usuario</option>';
+    document.getElementById('contratosCard').style.display = 'block';
+    return;
+  }
 
   try {
     const { data, error } = await supabase
       .from('v_mis_contratos')
       .select('*')
-      .eq('correo', correo);
+      .eq('correo_evaluador', correo)
+      .eq('estado_asignacion', 'pendiente');
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error Supabase:', error);
+      throw error;
+    }
 
     contratosData = data || [];
 
@@ -613,7 +631,7 @@ function seleccionarContrato() {
   if (!contratoSeleccionado) return;
 
   // Auto-completar datos del proveedor
-  document.getElementById('provNombre').value = contratoSeleccionado.razon_social;
+  document.getElementById('provNombre').value = contratoSeleccionado.razon_social || '';
   document.getElementById('provNIT').value = contratoSeleccionado.nit || '';
   document.getElementById('provPeriodo').value = contratoSeleccionado.periodo_evaluacion || '';
   document.getElementById('provOperacion').value = contratoSeleccionado.operacion || '';
@@ -622,11 +640,11 @@ function seleccionarContrato() {
   tipoActual = contratoSeleccionado.tipo_contrato;
   mostrarTipoContrato(tipoActual);
 
-  // Mostrar info
+  // Mostrar info del contrato
   document.getElementById('contratoInfo').innerHTML = `
-    <strong>Contrato:</strong> ${contratoSeleccionado.codigo_contrato}<br>
-    <strong>Tipo:</strong> ${tipoActual}<br>
-    <strong>Estado:</strong> ${contratoSeleccionado.estado_asignacion}
+    <strong>Contrato:</strong> ${contratoSeleccionado.codigo_contrato || ''}<br>
+    <strong>Tipo:</strong> ${tipoActual || ''}<br>
+    <strong>Estado:</strong> ${contratoSeleccionado.estado_asignacion || ''}
   `;
   document.getElementById('contratoInfo').style.display = 'block';
 
@@ -677,7 +695,8 @@ function ocultarFormulario() {
 // ============================================================
 function renderCriterios() {
   const criterios = TIPOS[tipoActual]?.criterios || [];
-  document.getElementById('criteriosTitle').textContent = `Criterios de evaluación — ${TIPOS[tipoActual]?.label || ''}`;
+  document.getElementById('criteriosTitle').textContent = 
+    `Criterios de evaluación — ${TIPOS[tipoActual]?.label || ''}`;
 
   const list = document.getElementById('criteriosList');
   list.innerHTML = '';
@@ -778,7 +797,7 @@ function updateScore() {
 }
 
 // ============================================================
-// ENVIAR EVALUACIÓN
+// ENVIAR EVALUACIÓN - GUARDAR DIRECTO EN SUPABASE
 // ============================================================
 async function enviarEvaluacion() {
   if (!contratoSeleccionado) {
@@ -804,7 +823,6 @@ async function enviarEvaluacion() {
 
   const payload = {
     id_asignacion: contratoSeleccionado.id_asignacion,
-    id_usuario: contratoSeleccionado.id_usuario,
     id_contrato: contratoSeleccionado.id_contrato,
     proveedor_nombre: contratoSeleccionado.razon_social,
     nit: contratoSeleccionado.nit,
@@ -815,27 +833,42 @@ async function enviarEvaluacion() {
     concepto: res.concepto,
     tipo_calificacion: res.tipo,
     criterios: criteriosJSON,
-    observaciones: document.getElementById('observaciones').value
+    observaciones: document.getElementById('observaciones').value,
+    evaluador_email: usuarioActual.email || usuarioActual.user
   };
 
   try {
-    const response = await fetch('/api/guardar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    // 1. Guardar evaluación
+    const { data, error } = await supabase
+      .from('evaluaciones')
+      .insert([payload])
+      .select();
 
-    const result = await response.json();
-
-    if (result.success) {
-      alert(`✅ Evaluación guardada exitosamente\nID: ${result.id}`);
-      resetForm();
-      cargarContratos(); // Recargar para quitar el contrato completado
-    } else {
-      alert('Error: ' + (result.error || 'No se pudo guardar'));
+    if (error) {
+      console.error('Error insertando evaluación:', error);
+      throw error;
     }
+
+    // 2. Actualizar asignación a completado
+    const { error: updateError } = await supabase
+      .from('asignaciones')
+      .update({ 
+        estado_asignacion: 'completado',
+        id_evaluacion: data[0].id
+      })
+      .eq('id', contratoSeleccionado.id_asignacion);
+
+    if (updateError) {
+      console.error('Error actualizando asignación:', updateError);
+    }
+
+    alert('Evaluación guardada exitosamente');
+    resetForm();
+    cargarContratos(); // Recargar para quitar el contrato completado
+
   } catch (err) {
-    alert('Error de conexión: ' + err.message);
+    console.error('Error guardando:', err);
+    alert('Error al guardar: ' + err.message);
   }
 }
 
@@ -852,7 +885,11 @@ function resetForm() {
 }
 
 async function logout() {
-  await fetch('/api/logout');
+  try {
+    await fetch('/api/logout');
+  } catch (e) {
+    console.error('Error logout:', e);
+  }
   window.location.href = '/login.html';
 }
 
