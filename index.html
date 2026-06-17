@@ -561,8 +561,9 @@ async function inicializar() {
     usuarioActual = await resp.json();
     console.log('Usuario:', usuarioActual);
 
+    // Mostrar nombre del usuario (usar 'name' que viene del backend)
     document.getElementById('userName').textContent = 
-      usuarioActual.name || usuarioActual.user || usuarioActual.email || 'Usuario';
+      usuarioActual.name || usuarioActual.email || 'Usuario';
 
     console.log('4. Cargando contratos...');
     await cargarContratos();
@@ -582,10 +583,11 @@ async function inicializar() {
 // CARGAR CONTRATOS DESDE SUPABASE
 // ============================================================
 async function cargarContratos() {
-  const correo = usuarioActual.email || usuarioActual.user;
+  // Usar SOLO usuarioActual.email (viene del backend /api/me)
+  const correo = usuarioActual.email;
 
   if (!correo) {
-    console.error('No se encontró email del usuario');
+    console.error('No se encontró email del usuario. usuarioActual:', usuarioActual);
     document.getElementById('contratoSelect').innerHTML = '<option value="">Error: sin email de usuario</option>';
     document.getElementById('contratosCard').style.display = 'block';
     return;
@@ -837,7 +839,7 @@ async function enviarEvaluacion() {
     tipo_calificacion: res.tipo,
     criterios: criteriosJSON,
     observaciones: document.getElementById('observaciones').value,
-    evaluador_email: usuarioActual.email || usuarioActual.user
+    evaluador_email: usuarioActual.email
   };
 
   try {
@@ -863,7 +865,7 @@ async function enviarEvaluacion() {
       console.error('Error actualizando asignación:', updateError);
     }
 
-    alert('Evaluación guardada exitosamente');
+    alert('✅ Evaluación guardada exitosamente');
     resetForm();
     cargarContratos();
 
