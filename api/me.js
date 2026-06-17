@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+// api/me.jsexport default async function handler(req, res) {
   const cookieHeader = req.headers.cookie || '';
   const cookies = Object.fromEntries(
     cookieHeader
@@ -19,9 +19,10 @@ export default async function handler(req, res) {
     return res.status(401).json({ authenticated: false });
   }
 
+  // La sesión guarda session.user.name y session.user.email
   return res.status(200).json({
     authenticated: true,
-    name: session.username,     
-    email: session.email        
+    name: session.user?.name || 'Usuario',
+    email: session.user?.email || '' 
   });
 }
