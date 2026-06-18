@@ -1,8 +1,5 @@
 import nodemailer from 'nodemailer';
 
-
-const nodemailer = require('nodemailer');
-
 export default async function handler(req, res) {
   // Solo permitir POST
   if (req.method !== 'POST') {
