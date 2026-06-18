@@ -1,18 +1,16 @@
 import nodemailer from 'nodemailer';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
   try {
     const { datosPA } = req.body;
-
     if (!datosPA) {
       return res.status(400).json({ error: 'Faltan datosPA' });
     }
 
-    // Log para debug
     console.log('Datos recibidos:', JSON.stringify(datosPA, null, 2));
     console.log('MAIL_USER definido:', !!process.env.MAIL_USER);
 
@@ -51,10 +49,10 @@ module.exports = async (req, res) => {
 
   } catch (err) {
     console.error('Error completo:', err);
-    res.status(500).json({ 
-      error: 'Error enviando email', 
+    res.status(500).json({
+      error: 'Error enviando email',
       detalle: err.message,
-      stack: err.stack 
+      stack: err.stack
     });
   }
-};
+}
