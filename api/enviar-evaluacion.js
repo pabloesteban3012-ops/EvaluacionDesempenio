@@ -1,11 +1,20 @@
-const express = require('express');
-const router = express.Router();
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
+import nodemailer from 'nodemailer';
 
-router.post('/enviar-evaluacion', async (req, res) => {
+
+const nodemailer = require('nodemailer');
+
+export default async function handler(req, res) {
+  // Solo permitir POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
+
   try {
     const { datosPA } = req.body;
+
+    if (!datosPA) {
+      return res.status(400).json({ error: 'Faltan datosPA' });
+    }
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.office365.com',
@@ -38,12 +47,13 @@ router.post('/enviar-evaluacion', async (req, res) => {
       `
     });
 
-    res.json({ ok: true });
+    res.status(200).json({ ok: true });
 
   } catch (err) {
     console.error('Error enviando email:', err);
-    res.status(500).json({ error: 'Error enviando email', detalle: err.message });
+    res.status(500).json({ 
+      error: 'Error enviando email', 
+      detalle: err.message 
+    });
   }
-});
-
-module.exports = router;
+}
