@@ -279,24 +279,17 @@
   .score-strip {
     background: var(--navy);
     border-top: 2px solid var(--teal);
-    padding: 14px 36px;
-    display: flex; align-items: center; gap: 24px;
+    padding: 18px 36px;
+    display: flex; align-items: center; gap: 28px;
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+    min-height: 72px;
   }
   .score-label { font-size: 10px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap; font-weight: 600; }
-  .score-value { font-family: 'DM Mono', monospace; font-size: 30px; font-weight: 500; color: var(--teal); min-width: 68px; }
-  .score-bar-wrap { flex: 1; height: 3px; background: rgba(255,255,255,0.10); border-radius: 2px; overflow: hidden; max-width: 420px; }
+  .score-value { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; color: var(--teal); min-width: 72px; }
+  .score-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,0.10); border-radius: 2px; overflow: hidden; }
   .score-bar { height: 100%; border-radius: 2px; transition: width 0.5s, background 0.4s; }
-  .concepto-badge {
-    padding: 5px 13px; border-radius: 20px;
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase;
-  }
-  .tipo-badge {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 600;
-  }
+  .concepto-badge { display: none; }
+  .tipo-badge { display: none; }
   .score-hint { font-size: 11px; color: rgba(255,255,255,0.28); margin-left: auto; white-space: nowrap; }
 
   /* ── CONCEPTO COLORS ── */
@@ -354,7 +347,64 @@
   .toast-btn.danger { background: var(--red); }
   .toast-btn.danger:hover { background: #9e2828; }
 
-  /* ── RESPONSIVE ── */
+  /* ── CRITERIA TOOLTIP PANEL ── */
+  .criterio-desc-panel {
+    position: fixed;
+    bottom: 80px; right: 24px;
+    width: 360px; max-width: calc(100vw - 32px);
+    background: var(--bg2);
+    border: 1px solid var(--teal-border);
+    border-left: 3px solid var(--teal);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(11,30,52,0.18);
+    z-index: 200;
+    overflow: hidden;
+    transform: translateY(12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s, transform 0.22s;
+  }
+  .criterio-desc-panel.visible {
+    opacity: 1; transform: translateY(0); pointer-events: all;
+  }
+  .cdp-header {
+    background: var(--navy); padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cdp-header-title { color: #fff; font-size: 12px; font-weight: 600; }
+  .cdp-header-close {
+    background: none; border: none; color: rgba(255,255,255,0.5);
+    cursor: pointer; font-size: 18px; line-height: 1; padding: 0;
+    transition: color 0.15s;
+  }
+  .cdp-header-close:hover { color: #fff; }
+  .cdp-criterio-name { padding: 12px 16px 0; font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .cdp-desc-intro { padding: 6px 16px 10px; font-size: 12px; color: var(--text-muted); border-bottom: 1px solid var(--border); line-height: 1.5; }
+  .cdp-levels { list-style: none; padding: 8px 0; }
+  .cdp-level {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 9px 16px; cursor: default;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .cdp-level:hover { background: var(--bg3); }
+  .cdp-level.active { background: rgba(27,140,168,0.07); border-left-color: var(--teal); }
+  .cdp-level-score {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600;
+    margin-top: 1px;
+  }
+  .score-pill-1 { background: var(--red-dim); color: var(--red); border: 1px solid rgba(184,50,50,0.3); }
+  .score-pill-2 { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(160,92,16,0.3); }
+  .score-pill-3 { background: rgba(27,140,168,0.09); color: var(--teal); border: 1px solid var(--teal-border); }
+  .score-pill-4 { background: var(--green-dim); color: var(--green); border: 1px solid rgba(10,124,82,0.28); }
+  .score-pill-5 { background: var(--navy); color: #fff; border: 1px solid var(--navy); }
+  .cdp-level-text { font-size: 12px; color: var(--text); line-height: 1.55; }
+
+  @media (max-width: 640px) {
+    .criterio-desc-panel { right: 8px; left: 8px; width: auto; bottom: 84px; }
+  }
   @media (max-width: 640px) {
     .type-selector { grid-template-columns: 1fr; }
     .info-grid { grid-template-columns: 1fr; }
@@ -392,17 +442,8 @@
 
 <header class="header">
   <div class="header-left">
-    <!-- Logo mark Aris Mining (M geométrico) -->
-    <div class="logo-mark">
-      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="18,4 32,32 24,32 18,20 12,32 4,32" fill="#1B8CA8"/>
-        <polygon points="18,14 24,32 12,32" fill="#0B1E34"/>
-      </svg>
-    </div>
-    <div class="brand-name">
-      <span class="brand-aris">ARIS</span>
-      <span class="brand-mining">MINING</span>
-    </div>
+    <!-- Logo: reemplazar src con la ruta de tu logo -->
+    <img id="companyLogo" src="/logo.png" alt="Aris Mining" style="height:36px;object-fit:contain;" onerror="this.style.display='none'">
     <span class="header-title">Evaluación de Desempeño Proveedores</span>
   </div>
   <div class="header-right">
@@ -490,6 +531,17 @@
 
 </main>
 
+<!-- CRITERIA DESCRIPTION PANEL -->
+<div class="criterio-desc-panel" id="cdpanel">
+  <div class="cdp-header">
+    <span class="cdp-header-title" id="cdpTitle">Descripción del criterio</span>
+    <button class="cdp-header-close" onclick="closeCDP()" aria-label="Cerrar">×</button>
+  </div>
+  <div class="cdp-criterio-name" id="cdpName"></div>
+  <div class="cdp-desc-intro" id="cdpIntro"></div>
+  <ul class="cdp-levels" id="cdpLevels"></ul>
+</div>
+
 <!-- SCORE STRIP -->
 <div class="score-strip" id="scoreStrip">
   <div>
@@ -509,7 +561,214 @@
 <script>
 let supabaseClient = null;
 
-const TIPOS = {
+const DESCRIPCIONES = {
+  'F-COM-016': {
+    'Calidad': {
+      intro: 'Se refiere a la calidad del servicio realizado por parte del proveedor.',
+      niveles: {
+        5: 'El servicio prestado cumple al 100% con los niveles de calidad solicitados. En particular, para las obras, la calidad de las terminaciones y acabado cumplen satisfactoriamente con lo solicitado. En caso de consultorías, el informe final muestra ampliamente la calidad solicitada. Cumple entre el 90% y el 100% con los KPI´s de Calidad del contrato u orden (si existen).',
+        4: 'El servicio prestado cumple razonablemente con los niveles de calidad solicitados. Pueden haber falencias menores, de fácil corrección. En el caso de las obras, las terminaciones y acabados cumplen razonablemente los niveles de calidad solicitados. En caso de consultorías, el informe final cumple razonablemente el nivel de calidad solicitado. Cumplimiento entre el 80% y el 89,9% con los KPI´s de Calidad del contrato u orden (si existen).',
+        3: 'El servicio prestado cumple con los niveles mínimos de la calidad solicitada. El trabajo es suficiente. En el caso de las obras, sus terminaciones y acabados con suficientes, aunque se requieren algunas correcciones. En el caso de consultorías, el informe cumple con lo mínimo, pero es susceptible de ser mejorado. Cumplimiento entre el 70% y el 79,9% con los KPI´s de Calidad del contrato u orden (si existen).',
+        2: 'La calidad del servicio prestado es deficiente y no se logra cumplir con el mínimo solicitado. En el caso de obras, sus terminaciones y acabados son deficientes, así como en el caso del informe final de consultorías y es necesario intervenirlas para recuperarlas, afectando plazos de entrega y Multas. Cumplimiento entre el 60% y el 69,9% con los KPI´s de Calidad del contrato u orden (si existen).',
+        1: 'No cumple. Cumplimiento inferior al 60% en los KPI´s de Calidad del contrato u orden (si existen).'
+      }
+    },
+    'Cumplimiento de plazos': {
+      intro: 'Este criterio se refiere al cumplimiento en los plazos para la prestación del servicio.',
+      niveles: {
+        5: 'El proveedor cumple permanentemente con los plazos en lo que respecta a la entrega del trabajo o servicio. Cumple entre el 90 y el 100% con los KPI´s de Oportunidad del contrato u orden (si existen).',
+        4: 'El proveedor cumple usualmente con los plazos en lo que respecta a la entrega del trabajo o servicio. Si hay retrasos, son menores y corrige espontáneamente. Cumplimiento entre el 80% y el 89,9% con los KPI´s de Oportunidad del contrato u orden (si existen).',
+        3: 'El proveedor cumple con los plazos en lo que respecta a la entrega del trabajo o servicio, aunque puede presentar ocasionalmente retrasos que logra compensar. Se requiere control permanente y las mejoras son evidentemente posibles. Cumplimiento entre el 70% y el 79,9% con los KPI´s de Oportunidad del contrato u orden (si existen).',
+        2: 'El proveedor cumple en forma irregular en lo que respecta a la entrega del trabajo o servicio. Se requiere control intenso y permanente por parte del administrador del contrato. Cumplimiento entre el 60% y el 69,9% con los KPI´s de Oportunidad del contrato u orden (si existen).',
+        1: 'El proveedor no cumple con los plazos para la entrega del trabajo o servicio. Cumplimiento inferior al 60% en los KPI´s de Oportunidad del contrato u orden (si existen).'
+      }
+    },
+    'Idoneidad del personal clave': {
+      intro: 'Este criterio indica el nivel de cumplimiento en cuanto a la idoneidad del personal clave.',
+      niveles: {
+        5: 'El proveedor cuenta con personal altamente calificado, con experiencia e instrucción, tanto para las tareas que debe desarrollar como para contribuir de manera eficiente a la gestión técnico-administrativa del trabajo o servicio prestado, de acuerdo con lo pactado en el contrato u orden.',
+        4: 'El proveedor cuenta con personal calificado, con experiencia e instrucción para las tareas que debe desarrollar, de acuerdo con lo pactado en el contrato u orden.',
+        3: 'El proveedor cuenta con personal medianamente calificado, con experiencia e instrucción básica, aunque suficiente para la prestación del servicio prestado.',
+        2: 'El proveedor cuenta con personal insuficientemente calificado, con experiencia e instrucción básica, aunque no suficiente y que no contribuye significativamente a la gestión técnico-administrativa del trabajo o servicio prestado.',
+        1: 'El proveedor no cuenta con personal con la debida calificación para realizar las tareas necesarias tendientes a entregar un trabajo o servicio según los estándares requeridos.'
+      }
+    },
+    'Cumplimiento administrativo': {
+      intro: 'Este criterio se refiere a la veracidad y entrega oportuna de la documentación por parte del proveedor, tal como informes, reportes, facturas, entre otros.',
+      niveles: {
+        5: 'El proveedor siempre cumple en forma estricta y oportuna con el orden administrativo, es riguroso en el cumplimiento de plazos y en la calidad en la presentación de la documentación.',
+        4: 'El proveedor cumple generalmente con el orden administrativo, es preciso en el cumplimiento de plazos y calidad en la presentación de la documentación. Ocasionalmente puede haber fallas o atrasos menores que son corregidos espontáneamente.',
+        3: 'El proveedor cumple ocasionalmente con el orden administrativo, el cumplimiento de plazos y la calidad en la presentación de la documentación. Puede haber fallas o atrasos que son corregidos cuando se le indican.',
+        2: 'El proveedor cumple irregularmente con el orden administrativo, cumplimiento de plazos y calidad en la presentación de la documentación o cumple en forma irregular.',
+        1: 'El proveedor no cumple con el orden administrativo.'
+      }
+    },
+    'Cumplimiento legal y de seguros': {
+      intro: 'Este criterio indica el nivel de cumplimiento de los permisos, licencias y demás requerimientos legales necesarios para la prestación de los servicios, así como la vigencia y cobertura de pólizas necesarias para la ejecución de los trabajos.',
+      niveles: {
+        5: 'El proveedor siempre cumple en forma estricta y oportuna con las pólizas en vigencia y cobertura. Tiene sus permisos, licencias y demás requerimientos legales vigentes. Le informa y envía al administrador y Procurement esta documentación de forma proactiva, sin necesidad de ser llamado por el Contratante.',
+        4: 'El proveedor cumple en forma estricta y oportuna con las pólizas en vigencia y cobertura. Tiene sus permisos, licencias y demás requerimientos legales vigentes. Le informa y envía al administrador y Procurement esta documentación, una vez es requerido por parte del Contratante.',
+        3: 'El proveedor ha presentado inconvenientes con mantener las pólizas vigentes y con la cobertura exigida que han sido subsanados sin mayor impacto para la organización. Tiene sus permisos, licencias y demás requerimientos legales vigentes. Le informa y envía al administrador y Procurement esta documentación, una vez es requerido por parte del Contratante.',
+        2: 'El proveedor ha presentado inconvenientes con mantener las pólizas vigentes y con la cobertura exigida que han sido subsanados sin mayor impacto para la organización. Ha dejado vencer sólo en una ocasión alguno de sus permisos, licencias y demás requerimientos legales vigentes. Le informa y envía al administrador y Procurement esta documentación, sólo si es requerido por parte del Contratante.',
+        1: 'El proveedor ha presentado inconvenientes con mantener las pólizas vigentes y con la cobertura exigida que no fueron subsanados a tiempo con un alto impacto para la organización. Ha dejado vencer en más de una ocasión alguno de sus permisos, licencias y demás requerimientos legales vigentes. Le informa y envía al administrador y Procurement esta documentación, sólo si es requerido por parte del Contratante.'
+      }
+    }
+  },
+  'F-COM-007': {
+    'Calidad': {
+      intro: 'Se refiere a la calidad del servicio u obra realizado por parte del proveedor.',
+      niveles: {
+        5: 'El servicio prestado cumple al 100% con los niveles de calidad solicitados. Las terminaciones y acabados cumplen satisfactoriamente con lo solicitado. Cumple entre el 90% y el 100% con los KPI´s de Calidad del contrato u orden (si existen).',
+        4: 'El servicio prestado cumple razonablemente con los niveles de calidad solicitados. Pueden haber falencias menores, de fácil corrección. Cumplimiento entre el 80% y el 89,9% con los KPI´s de Calidad.',
+        3: 'El servicio prestado cumple con los niveles mínimos de calidad. Se requieren algunas correcciones. Cumplimiento entre el 70% y el 79,9% con los KPI´s de Calidad.',
+        2: 'La calidad del servicio prestado es deficiente. No se logra cumplir con el mínimo solicitado. Cumplimiento entre el 60% y el 69,9% con los KPI´s de Calidad.',
+        1: 'No cumple. Cumplimiento inferior al 60% en los KPI´s de Calidad del contrato u orden (si existen).'
+      }
+    },
+    'Cumplimiento de plazos': {
+      intro: 'Este criterio se refiere al cumplimiento en los plazos para la prestación del servicio u obra.',
+      niveles: {
+        5: 'El proveedor cumple permanentemente con los plazos de entrega. Cumple entre el 90 y el 100% con los KPI´s de Oportunidad del contrato u orden (si existen).',
+        4: 'El proveedor cumple usualmente con los plazos. Si hay retrasos, son menores y corrige espontáneamente. Cumplimiento entre el 80% y el 89,9% con los KPI´s de Oportunidad.',
+        3: 'El proveedor cumple con los plazos aunque puede presentar ocasionalmente retrasos que logra compensar. Se requiere control permanente. Cumplimiento entre el 70% y el 79,9%.',
+        2: 'El proveedor cumple en forma irregular. Se requiere control intenso y permanente por parte del administrador. Cumplimiento entre el 60% y el 69,9%.',
+        1: 'El proveedor no cumple con los plazos para la entrega del trabajo o servicio. Cumplimiento inferior al 60%.'
+      }
+    },
+    'Idoneidad del personal clave': {
+      intro: 'Este criterio indica el nivel de cumplimiento en cuanto a la idoneidad del personal clave asignado.',
+      niveles: {
+        5: 'El proveedor cuenta con personal altamente calificado, con experiencia e instrucción para las tareas a desarrollar y para contribuir eficientemente a la gestión técnico-administrativa, de acuerdo con lo pactado en el contrato.',
+        4: 'El proveedor cuenta con personal calificado, con experiencia e instrucción para las tareas que debe desarrollar, de acuerdo con lo pactado en el contrato u orden.',
+        3: 'El proveedor cuenta con personal medianamente calificado, con experiencia e instrucción básica, aunque suficiente para la prestación del servicio.',
+        2: 'El proveedor cuenta con personal insuficientemente calificado que no contribuye significativamente a la gestión técnico-administrativa del trabajo o servicio.',
+        1: 'El proveedor no cuenta con personal con la debida calificación para realizar las tareas necesarias según los estándares requeridos.'
+      }
+    },
+    'Seguridad, salud y medio ambiente': {
+      intro: 'Este criterio evalúa el cumplimiento de los estándares de seguridad, salud ocupacional y medio ambiente.',
+      niveles: {
+        5: 'El proveedor cumple estrictamente con todos los estándares de SST y medio ambiente. No registra accidentes ni incidentes. Mantiene sus indicadores de accidentalidad en cero.',
+        4: 'El proveedor cumple generalmente con los estándares de SST y medio ambiente. Puede presentar incidentes menores que son corregidos de forma inmediata.',
+        3: 'El proveedor cumple con los estándares mínimos de SST y medio ambiente. Presenta algunos incidentes que son gestionados oportunamente.',
+        2: 'El proveedor cumple irregularmente con los estándares de SST y medio ambiente. Presenta accidentes o incidentes que requieren intervención del contratante.',
+        1: 'El proveedor no cumple con los estándares de SST y medio ambiente. Ha generado accidentes o incidentes de alto impacto.'
+      }
+    },
+    'Cumplimiento laboral': {
+      intro: 'Este criterio evalúa el cumplimiento de las obligaciones laborales con los trabajadores.',
+      niveles: {
+        5: 'El proveedor cumple estrictamente con todas las obligaciones laborales. Paga puntualmente salarios, prestaciones y seguridad social. No presenta ninguna queja o reclamación laboral.',
+        4: 'El proveedor cumple generalmente con sus obligaciones laborales. Puede presentar situaciones menores que son resueltas oportunamente.',
+        3: 'El proveedor cumple con sus obligaciones laborales mínimas, aunque presenta algunas irregularidades que son corregidas cuando se le indican.',
+        2: 'El proveedor cumple irregularmente con sus obligaciones laborales. Requiere intervención del administrador del contrato para su corrección.',
+        1: 'El proveedor no cumple con sus obligaciones laborales, generando impacto negativo sobre los trabajadores y la organización contratante.'
+      }
+    },
+    'Cumplimiento social': {
+      intro: 'Este criterio evalúa el compromiso del proveedor con las comunidades y su entorno social.',
+      niveles: {
+        5: 'El proveedor cumple estrictamente con todos los compromisos sociales pactados y actúa de forma proactiva con las comunidades del área de influencia.',
+        4: 'El proveedor cumple generalmente con los compromisos sociales pactados. Gestiona adecuadamente las situaciones que se presentan con las comunidades.',
+        3: 'El proveedor cumple con los compromisos sociales mínimos, aunque requiere seguimiento para su cumplimiento.',
+        2: 'El proveedor cumple irregularmente con sus compromisos sociales, generando situaciones que requieren intervención del administrador.',
+        1: 'El proveedor no cumple con sus compromisos sociales, generando conflictos con las comunidades del área de influencia.'
+      }
+    },
+    'Infraestructura, equipos y herramientas': {
+      intro: 'Este criterio evalúa la disponibilidad y estado de la infraestructura, equipos y herramientas del proveedor.',
+      niveles: {
+        5: 'El proveedor cuenta con infraestructura, equipos y herramientas en excelente estado y en la cantidad requerida. Cumple estrictamente con los requisitos del contrato.',
+        4: 'El proveedor cuenta con infraestructura, equipos y herramientas en buen estado y en cantidad suficiente para la prestación del servicio.',
+        3: 'El proveedor cuenta con infraestructura, equipos y herramientas mínimos necesarios, aunque con algunas deficiencias que no impiden la prestación del servicio.',
+        2: 'El proveedor presenta deficiencias en infraestructura, equipos o herramientas que afectan la calidad o el plazo del servicio prestado.',
+        1: 'El proveedor no cuenta con la infraestructura, equipos o herramientas necesarios para la prestación del servicio.'
+      }
+    },
+    'Suministro de materiales': {
+      intro: 'Este criterio evalúa la oportunidad y calidad en el suministro de materiales.',
+      niveles: {
+        5: 'El proveedor suministra los materiales requeridos con la calidad y oportunidad exigidas. No presenta desabastecimiento.',
+        4: 'El proveedor suministra los materiales requeridos con buena calidad y oportunidad. Puede presentar retrasos menores que son corregidos espontáneamente.',
+        3: 'El proveedor suministra los materiales requeridos con calidad y oportunidad suficientes, aunque puede presentar algunas deficiencias que son corregidas cuando se le indican.',
+        2: 'El proveedor presenta deficiencias en el suministro de materiales en cuanto a calidad u oportunidad, afectando el desarrollo del servicio u obra.',
+        1: 'El proveedor no garantiza el suministro oportuno y con la calidad requerida de los materiales necesarios para la prestación del servicio u obra.'
+      }
+    },
+    'Cumplimiento administrativo': {
+      intro: 'Este criterio se refiere a la veracidad y entrega oportuna de la documentación requerida.',
+      niveles: {
+        5: 'El proveedor siempre cumple en forma estricta y oportuna con el orden administrativo, es riguroso en el cumplimiento de plazos y en la calidad en la presentación de la documentación.',
+        4: 'El proveedor cumple generalmente con el orden administrativo, es preciso en el cumplimiento de plazos y calidad en la presentación de la documentación. Ocasionalmente puede haber fallas o atrasos menores que son corregidos espontáneamente.',
+        3: 'El proveedor cumple ocasionalmente con el orden administrativo, el cumplimiento de plazos y la calidad en la presentación de la documentación. Puede haber fallas o atrasos que son corregidos cuando se le indican.',
+        2: 'El proveedor cumple irregularmente con el orden administrativo, cumplimiento de plazos y calidad en la presentación de la documentación.',
+        1: 'El proveedor no cumple con el orden administrativo.'
+      }
+    },
+    'Cumplimiento legal y de seguros': {
+      intro: 'Este criterio indica el nivel de cumplimiento de los permisos, licencias y requerimientos legales, así como la vigencia y cobertura de pólizas.',
+      niveles: {
+        5: 'El proveedor siempre cumple en forma estricta y oportuna con las pólizas en vigencia y cobertura. Tiene sus permisos, licencias y demás requerimientos legales vigentes. Le informa y envía al administrador y Procurement esta documentación de forma proactiva.',
+        4: 'El proveedor cumple en forma estricta y oportuna con las pólizas en vigencia y cobertura. Tiene sus permisos y licencias vigentes. Envía la documentación una vez es requerido.',
+        3: 'El proveedor ha presentado inconvenientes con mantener las pólizas vigentes y con la cobertura exigida que han sido subsanados sin mayor impacto para la organización.',
+        2: 'El proveedor ha presentado inconvenientes con pólizas y ha dejado vencer sólo en una ocasión alguno de sus permisos o licencias.',
+        1: 'El proveedor ha presentado inconvenientes con pólizas no subsanados a tiempo con alto impacto para la organización. Ha dejado vencer en más de una ocasión sus permisos o licencias.'
+      }
+    }
+  },
+  'F-COM-008': {
+    'Condiciones comerciales': {
+      intro: 'Este criterio evalúa el cumplimiento de las condiciones comerciales pactadas.',
+      niveles: {
+        5: 'El proveedor cumple estrictamente con todas las condiciones comerciales pactadas: precio, descuentos, forma de pago y demás condiciones del contrato u orden de compra.',
+        4: 'El proveedor cumple generalmente con las condiciones comerciales pactadas. Puede presentar situaciones menores que son resueltas oportunamente.',
+        3: 'El proveedor cumple con las condiciones comerciales mínimas, aunque puede presentar algunas desviaciones que son corregidas cuando se le indican.',
+        2: 'El proveedor cumple irregularmente con las condiciones comerciales pactadas, requiriendo intervención del administrador del contrato.',
+        1: 'El proveedor no cumple con las condiciones comerciales pactadas, generando perjuicios para la organización.'
+      }
+    },
+    'Calidad': {
+      intro: 'Se refiere a la calidad de los bienes entregados por el proveedor.',
+      niveles: {
+        5: 'Los bienes suministrados cumplen al 100% con las especificaciones técnicas y estándares de calidad requeridos. No presenta no-conformidades. Cumple entre el 90% y el 100% con los KPI´s de Calidad del contrato u orden (si existen).',
+        4: 'Los bienes suministrados cumplen razonablemente con las especificaciones técnicas requeridas. Pueden haber falencias menores, de fácil corrección. Cumplimiento entre el 80% y el 89,9% con los KPI´s de Calidad.',
+        3: 'Los bienes suministrados cumplen con los niveles mínimos de calidad, aunque se presentan algunas desviaciones que son corregidas. Cumplimiento entre el 70% y el 79,9% con los KPI´s de Calidad.',
+        2: 'La calidad de los bienes suministrados es deficiente. No cumple con el mínimo solicitado. Cumplimiento entre el 60% y el 69,9% con los KPI´s de Calidad.',
+        1: 'No cumple. Cumplimiento inferior al 60% en los KPI´s de Calidad del contrato u orden (si existen).'
+      }
+    },
+    'Oportunidad y completitud': {
+      intro: 'Este criterio evalúa la entrega oportuna y completa de los bienes solicitados.',
+      niveles: {
+        5: 'El proveedor entrega los bienes de forma completa y en los plazos acordados. No presenta entregas parciales no autorizadas ni retrasos. Cumple entre el 90% y el 100% con los KPI´s de Oportunidad.',
+        4: 'El proveedor entrega los bienes de forma usualmente completa y en los plazos acordados. Puede presentar retrasos o entregas parciales menores que corrige espontáneamente. Cumplimiento entre el 80% y el 89,9%.',
+        3: 'El proveedor cumple con los plazos de entrega y completitud mínimos requeridos. Puede presentar ocasionalmente retrasos o entregas parciales que logra compensar. Cumplimiento entre el 70% y el 79,9%.',
+        2: 'El proveedor presenta irregularidades en la entrega oportuna y completa de los bienes. Requiere control intenso por parte del administrador. Cumplimiento entre el 60% y el 69,9%.',
+        1: 'El proveedor no cumple con la entrega oportuna y completa de los bienes. Cumplimiento inferior al 60%.'
+      }
+    },
+    'Servicio post-venta': {
+      intro: 'Este criterio evalúa la calidad del servicio post-venta ofrecido por el proveedor.',
+      niveles: {
+        5: 'El proveedor ofrece un servicio post-venta excelente. Atiende de forma inmediata y efectiva todas las reclamaciones, garantías y solicitudes de soporte técnico.',
+        4: 'El proveedor ofrece un buen servicio post-venta. Atiende oportunamente las reclamaciones y garantías, aunque puede presentar demoras menores.',
+        3: 'El proveedor ofrece un servicio post-venta aceptable. Atiende las reclamaciones y garantías cuando se le requiere, aunque con demoras.',
+        2: 'El proveedor ofrece un servicio post-venta deficiente. Presenta dificultades para atender reclamaciones y garantías, requiriendo insistencia del administrador.',
+        1: 'El proveedor no ofrece servicio post-venta adecuado. No atiende oportunamente las reclamaciones, garantías ni solicitudes de soporte técnico.'
+      }
+    },
+    'Documentación': {
+      intro: 'Este criterio evalúa la calidad y oportunidad de la documentación entregada con los bienes.',
+      niveles: {
+        5: 'El proveedor entrega siempre de forma oportuna y completa toda la documentación requerida (fichas técnicas, certificados de calidad, remisiones, facturas, garantías, manuales, entre otros).',
+        4: 'El proveedor entrega generalmente de forma oportuna y completa la documentación requerida. Puede presentar omisiones menores que corrige espontáneamente.',
+        3: 'El proveedor entrega la documentación mínima requerida, aunque puede presentar omisiones o retrasos que corrige cuando se le indica.',
+        2: 'El proveedor entrega la documentación de forma irregular, presentando omisiones o retrasos que requieren intervención del administrador.',
+        1: 'El proveedor no entrega la documentación requerida de forma oportuna y completa, afectando los procesos de la organización.'
+      }
+    }
+  }
+};
   'F-COM-007': {
     label: 'Servicios u obras',
     criterios: [
@@ -547,7 +806,7 @@ const TIPOS = {
   }
 };
 
-const RANGOS = [
+const TIPOS = {
   { min: 4.5, max: 5.0, concepto: 'EXCELENTE',      tipo: 'A' },
   { min: 3.5, max: 4.49,concepto: 'BUENO',           tipo: 'B' },
   { min: 2.5, max: 3.49,concepto: 'ACEPTABLE',       tipo: 'C' },
@@ -706,6 +965,44 @@ function renderCriterios() {
   });
 }
 
+/* ── CRITERIA DESCRIPTION PANEL ── */
+let currentCDPCriterio = null;
+
+function openCDP(nombreCriterio, valorSeleccionado) {
+  const descData = DESCRIPCIONES[tipoActual]?.[nombreCriterio];
+  if (!descData) return;
+
+  currentCDPCriterio = nombreCriterio;
+  document.getElementById('cdpTitle').textContent = 'Descripción del criterio';
+  document.getElementById('cdpName').textContent = nombreCriterio;
+  document.getElementById('cdpIntro').textContent = descData.intro;
+
+  const ul = document.getElementById('cdpLevels');
+  ul.innerHTML = '';
+  for (let v = 5; v >= 1; v--) {
+    const li = document.createElement('li');
+    li.className = 'cdp-level' + (valorSeleccionado === v ? ' active' : '');
+    li.innerHTML = `
+      <div class="cdp-level-score score-pill-${v}">${v}</div>
+      <div class="cdp-level-text">${descData.niveles[v] || ''}</div>
+    `;
+    ul.appendChild(li);
+  }
+  document.getElementById('cdpanel').classList.add('visible');
+}
+
+function closeCDP() {
+  document.getElementById('cdpanel').classList.remove('visible');
+  currentCDPCriterio = null;
+}
+
+function updateCDPActive(valor) {
+  document.querySelectorAll('.cdp-level').forEach((li, i) => {
+    const v = 5 - i;
+    li.classList.toggle('active', v === valor);
+  });
+}
+
 function setNota(nombre, valor, idx) {
   notas[nombre] = valor;
   const row = document.getElementById(`row-${idx}`);
@@ -715,6 +1012,11 @@ function setNota(nombre, valor, idx) {
     btn.className = v === valor ? `rating-btn selected-${v}` : 'rating-btn';
   });
   updateScore();
+  if (currentCDPCriterio === nombre) {
+    updateCDPActive(valor);
+  } else {
+    openCDP(nombre, valor);
+  }
 }
 
 function calcularTotal() {
