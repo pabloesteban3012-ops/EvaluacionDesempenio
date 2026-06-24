@@ -347,7 +347,123 @@
   .toast-btn.danger { background: var(--red); }
   .toast-btn.danger:hover { background: #9e2828; }
 
-  /* ── CRITERIA TOOLTIP PANEL ── */
+  /* ── WELCOME MODAL ── */
+  .welcome-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(11,30,52,0.72);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.35s;
+    pointer-events: none;
+  }
+  .welcome-overlay.visible { opacity: 1; pointer-events: all; }
+  .welcome-modal {
+    background: var(--bg2);
+    border-radius: 16px;
+    width: 100%; max-width: 680px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(11,30,52,0.30);
+    transform: translateY(16px) scale(0.98);
+    transition: transform 0.35s;
+  }
+  .welcome-overlay.visible .welcome-modal { transform: translateY(0) scale(1); }
+  .welcome-modal-header {
+    background: var(--navy);
+    border-bottom: 3px solid var(--teal);
+    padding: 28px 36px 24px;
+    position: relative;
+  }
+  .welcome-modal-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 10px;
+  }
+  .welcome-modal-title {
+    font-size: 22px; font-weight: 700;
+    color: #ffffff; line-height: 1.25;
+  }
+  .welcome-modal-subtitle {
+    font-size: 13px; color: rgba(255,255,255,0.55);
+    margin-top: 6px; font-weight: 400;
+  }
+  .welcome-modal-icon {
+    position: absolute; top: 24px; right: 32px;
+    width: 48px; height: 48px;
+    background: rgba(27,140,168,0.15);
+    border: 1px solid rgba(27,140,168,0.30);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .welcome-modal-icon svg { width: 26px; height: 26px; }
+  .welcome-modal-body { padding: 32px 36px; }
+  .welcome-objective {
+    background: var(--bg3);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+  }
+  .welcome-objective-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 8px;
+  }
+  .welcome-objective p {
+    font-size: 14px; color: var(--text);
+    line-height: 1.7; font-weight: 400;
+  }
+  .welcome-steps {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-bottom: 28px;
+  }
+  .welcome-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--bg3); border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+  }
+  .welcome-step-num {
+    flex-shrink: 0;
+    width: 26px; height: 26px; border-radius: 8px;
+    background: var(--navy); color: var(--teal);
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+  .welcome-step-text { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .welcome-step-text strong { color: var(--text); font-weight: 600; display: block; margin-bottom: 2px; font-size: 13px; }
+  .welcome-modal-footer {
+    padding: 0 36px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .welcome-footer-note {
+    font-size: 11px; color: var(--text-dim); line-height: 1.5; max-width: 320px;
+  }
+  .btn-welcome-accept {
+    flex-shrink: 0;
+    background: var(--teal); color: #fff;
+    border: none; border-radius: 9px;
+    padding: 13px 32px;
+    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .btn-welcome-accept:hover { background: var(--teal-hover); }
+  .btn-welcome-accept:active { transform: scale(0.98); }
+
+  @media (max-width: 600px) {
+    .welcome-modal-header { padding: 22px 22px 18px; }
+    .welcome-modal-body { padding: 22px 22px 0; }
+    .welcome-modal-footer { padding: 20px 22px 22px; flex-direction: column; align-items: stretch; }
+    .btn-welcome-accept { text-align: center; }
+    .welcome-steps { grid-template-columns: 1fr; }
+    .welcome-modal-icon { display: none; }
+    .welcome-modal-title { font-size: 18px; }
+  }
   .criterio-desc-panel {
     position: fixed;
     bottom: 80px; right: 24px;
@@ -431,6 +547,72 @@
     <div class="toast-title" id="toastTitle">Título</div>
     <div class="toast-msg" id="toastMsg">Mensaje</div>
     <button class="toast-btn" id="toastBtn" onclick="closeToast()">Aceptar</button>
+  </div>
+</div>
+
+<!-- WELCOME MODAL -->
+<div class="welcome-overlay" id="welcomeOverlay" style="display:none;">
+  <div class="welcome-modal">
+
+    <div class="welcome-modal-header">
+      <div class="welcome-modal-eyebrow">Aris Mining · Gestión de Proveedores</div>
+      <div class="welcome-modal-title">Evaluación de Desempeño<br>de Proveedores</div>
+      <div class="welcome-modal-subtitle">Formulario electrónico — F-COM-007 / F-COM-008 / F-COM-016</div>
+      <div class="welcome-modal-icon">
+        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 3L22 8V18L13 23L4 18V8L13 3Z" stroke="#1B8CA8" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M13 3V23M4 8L22 18M22 8L4 18" stroke="#1B8CA8" stroke-width="1.2" stroke-opacity="0.45"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="welcome-modal-body">
+      <div class="welcome-objective">
+        <div class="welcome-objective-label">Objetivo</div>
+        <p>Establecer la metodología y los criterios con los cuales se deberá evaluar el desempeño de los Proveedores de ARIS MINING, como aporte al cumplimiento de los planes estratégicos de la compañía, para mejorar la administración de riesgos y garantizar un adecuado grupo de proveedores para las diferentes necesidades de la operación.</p>
+      </div>
+
+      <div class="welcome-steps">
+        <div class="welcome-step">
+          <div class="welcome-step-num">1</div>
+          <div class="welcome-step-text">
+            <strong>Selecciona tu contrato</strong>
+            Verás los contratos asignados a ti pendientes de evaluación.
+          </div>
+        </div>
+        <div class="welcome-step">
+          <div class="welcome-step-num">2</div>
+          <div class="welcome-step-text">
+            <strong>Califica cada criterio</strong>
+            Asigna una nota del 1 al 5 según el nivel de servicio del proveedor.
+          </div>
+        </div>
+        <div class="welcome-step">
+          <div class="welcome-step-num">3</div>
+          <div class="welcome-step-text">
+            <strong>Consulta las descripciones</strong>
+            Al calificar, verás la descripción detallada de cada nivel de puntaje.
+          </div>
+        </div>
+        <div class="welcome-step">
+          <div class="welcome-step-num">4</div>
+          <div class="welcome-step-text">
+            <strong>Envía la evaluación</strong>
+            La evaluación se guarda y se notifica automáticamente al área de Procurement.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-modal-footer">
+      <div class="welcome-footer-note">
+        Esta evaluación aplica a contratos y órdenes de compra activos. Para dudas, contacta al área de Procurement.
+      </div>
+      <button class="btn-welcome-accept" onclick="cerrarBienvenida()">
+        Entendido, comenzar →
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -823,6 +1005,18 @@ let notas = {};
 let tipoActual = '';
 let toastCallback = null;
 
+/* ── WELCOME MODAL ── */
+function mostrarBienvenida() {
+  const overlay = document.getElementById('welcomeOverlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('visible'));
+}
+function cerrarBienvenida() {
+  const overlay = document.getElementById('welcomeOverlay');
+  overlay.classList.remove('visible');
+  setTimeout(() => { overlay.style.display = 'none'; }, 350);
+}
+
 /* ── TOAST ── */
 function showToast({ icon = '✅', title = '', msg = '', btnText = 'Aceptar', btnClass = '', cb = null } = {}) {
   document.getElementById('toastIcon').textContent = icon;
@@ -855,6 +1049,7 @@ async function inicializar() {
     usuarioActual = await resp.json();
     document.getElementById('userName').textContent = usuarioActual.name || usuarioActual.email || 'Usuario';
 
+    mostrarBienvenida();
     await cargarContratos();
     document.getElementById('loadingScreen').style.display = 'none';
 
