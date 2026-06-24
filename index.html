@@ -4,352 +4,385 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Evaluación de Desempeño — Aris Mining</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --blue: #1A56DB;
-    --blue-hover: #1648C0;
-    --blue-light: #EBF2FF;
-    --blue-dim: rgba(26,86,219,0.08);
-    --blue-border: rgba(26,86,219,0.2);
-    --bg: #F5F8FF;
-    --bg2: #FFFFFF;
-    --bg3: #EEF3FC;
-    --bg4: #E4ECFA;
-    --border: rgba(26,86,219,0.12);
-    --text: #0F1C3F;
-    --text-muted: #5A6A8A;
-    --text-dim: #9AAAC8;
-    --green: #0E8A4F;
-    --green-dim: rgba(14,138,79,0.09);
-    --red: #C0392B;
-    --red-dim: rgba(192,57,43,0.09);
-    --amber: #B45309;
-    --amber-dim: rgba(180,83,9,0.09);
+    --navy:       #0B1E34;
+    --navy-mid:   #132840;
+    --navy-light: #1A3450;
+    --teal:       #1B8CA8;
+    --teal-hover: #167991;
+    --teal-light: rgba(27,140,168,0.10);
+    --teal-border:rgba(27,140,168,0.28);
+    --bg:         #F0F4F8;
+    --bg2:        #FFFFFF;
+    --bg3:        #EBF1F7;
+    --bg4:        #DDE6EF;
+    --border:     rgba(11,30,52,0.10);
+    --text:       #0B1E34;
+    --text-muted: #4A6080;
+    --text-dim:   #8AA0B8;
+    --green:      #0A7C52;
+    --green-dim:  rgba(10,124,82,0.09);
+    --red:        #B83232;
+    --red-dim:    rgba(184,50,50,0.09);
+    --amber:      #A05C10;
+    --amber-dim:  rgba(160,92,16,0.09);
   }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     line-height: 1.6;
     min-height: 100vh;
-    padding-bottom: 80px;
+    padding-bottom: 90px;
   }
 
+  /* ── HEADER ── */
   .header {
-    background: var(--blue);
-    padding: 0 32px;
+    background: var(--navy);
+    padding: 0 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
+    height: 64px;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 12px rgba(26,86,219,0.18);
+    border-bottom: 2px solid var(--teal);
   }
-  .header-logo { display: flex; align-items: center; gap: 12px; }
-  .header-logo span { color: white; font-weight: 600; font-size: 16px; }
-  .header-code { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.5); }
-  .user-info { color: rgba(255,255,255,0.9); font-size: 13px; }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo-mark {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 100%; height: 100%; }
+  .brand-name { display: flex; flex-direction: column; line-height: 1.1; }
+  .brand-aris { color: #FFFFFF; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; }
+  .brand-mining { color: var(--teal); font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; }
+  .header-title {
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    padding-left: 18px;
+    margin-left: 4px;
+  }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+  .user-info { color: rgba(255,255,255,0.80); font-size: 13px; }
+  .btn-logout {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 6px;
+    padding: 7px 16px;
+    color: rgba(255,255,255,0.80);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .btn-logout:hover { border-color: var(--teal); color: var(--teal); }
 
+  /* ── LOADING ── */
   .loading-screen {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 1000; gap: 16px;
   }
-  .loading-screen p { color: var(--text-muted); margin-top: 16px; }
+  .loading-screen p { color: var(--text-muted); font-size: 13px; }
   .spinner {
-    width: 40px; height: 40px;
-    border: 3px solid var(--bg3);
-    border-top-color: var(--blue);
+    width: 38px; height: 38px;
+    border: 2.5px solid var(--bg4);
+    border-top-color: var(--teal);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.9s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .main { max-width: 860px; margin: 0 auto; padding: 32px 24px 40px; }
+  /* ── LAYOUT ── */
+  .main { max-width: 860px; margin: 0 auto; padding: 36px 24px 48px; }
 
+  /* ── SECTION DIVIDER ── */
+  .section-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .section-line {
+    width: 3px; height: 18px;
+    background: var(--teal);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  /* ── CARD ── */
   .card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 22px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 4px rgba(26,86,219,0.05);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(11,30,52,0.06);
   }
 
-  .section-label {
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: 10px;
-  }
-
-  .contrato-select {
+  /* ── FORM ELEMENTS ── */
+  .contrato-select,
+  .field-group input,
+  .field-group select,
+  textarea {
     background: var(--bg3);
     border: 1.5px solid var(--border);
     border-radius: 8px;
-    padding: 12px 14px;
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;
     outline: none;
     width: 100%;
-    cursor: pointer;
+    transition: border-color 0.18s, box-shadow 0.18s;
   }
-  .contrato-select:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
-  }
-  .contrato-info {
-    margin-top: 12px;
-    padding: 12px 14px;
-    background: var(--blue-light);
-    border: 1px solid var(--blue-border);
-    border-radius: 8px;
-    font-size: 13px;
-    color: var(--blue);
-  }
+  .contrato-select { padding: 12px 14px; font-size: 14px; cursor: pointer; }
+  .field-group input, .field-group select { padding: 10px 14px; font-size: 13px; }
+  textarea { padding: 14px; font-size: 13px; resize: vertical; min-height: 90px; }
 
-  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .field-group { display: flex; flex-direction: column; gap: 6px; }
-  .field-group label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em; font-weight: 500; }
-  .field-group input, .field-group select {
-    background: var(--bg3);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    outline: none;
-    width: 100%;
-  }
-  .field-group input:focus, .field-group select:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+  .contrato-select:focus,
+  .field-group input:focus,
+  .field-group select:focus,
+  textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(27,140,168,0.12);
+    background: #fff;
   }
   .field-group input:disabled, .field-group select:disabled {
-    background: var(--bg4);
-    color: var(--text-dim);
-    cursor: not-allowed;
+    background: var(--bg4); color: var(--text-muted); cursor: not-allowed;
   }
 
-  .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-group label { font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* ── CONTRATO INFO BOX ── */
+  .contrato-info {
+    margin-top: 12px; padding: 12px 16px;
+    background: var(--teal-light);
+    border: 1px solid var(--teal-border);
+    border-left: 3px solid var(--teal);
+    border-radius: 8px;
+    font-size: 13px; color: var(--navy-mid);
+    line-height: 1.7;
+  }
+
+  /* ── TIPO SELECTOR ── */
+  .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
   .type-btn {
     background: var(--bg3);
     border: 1.5px solid var(--border);
     border-radius: 10px;
-    padding: 14px 12px;
-    cursor: pointer;
-    transition: all 0.2s;
+    padding: 16px 14px;
+    cursor: not-allowed;
     text-align: left;
+    opacity: 0.65;
+    transition: all 0.2s;
   }
-  .type-btn:hover { border-color: var(--blue-border); background: var(--blue-light); }
-  .type-btn.active { border-color: var(--blue); background: var(--blue-dim); box-shadow: 0 0 0 3px rgba(26,86,219,0.08); }
-  .type-btn-code { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); margin-bottom: 4px; }
-  .type-btn-label { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; }
-  .type-btn.active .type-btn-label { color: var(--blue); }
-  .type-btn.active .type-btn-code { color: var(--blue); opacity: 0.7; }
-  .type-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .type-btn.active {
+    border-color: var(--teal);
+    background: var(--teal-light);
+    opacity: 1;
+    box-shadow: 0 0 0 3px rgba(27,140,168,0.10);
+  }
+  .type-btn-code { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); margin-bottom: 5px; }
+  .type-btn-label { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; letter-spacing: 0.01em; }
+  .type-btn.active .type-btn-label { color: var(--teal); }
+  .type-btn.active .type-btn-code { color: var(--teal); opacity: 0.8; }
 
+  /* ── CRITERIOS ── */
   .criterios-header {
     display: grid;
-    grid-template-columns: 28px 1fr 60px 200px;
+    grid-template-columns: 28px 1fr 64px 210px;
     gap: 12px;
-    padding: 8px 14px;
-    font-size: 10px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    padding: 6px 14px 10px;
+    font-size: 10px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
   }
   .criterio-row {
     display: grid;
-    grid-template-columns: 28px 1fr 60px 200px;
-    gap: 12px;
-    align-items: center;
-    padding: 14px;
+    grid-template-columns: 28px 1fr 64px 210px;
+    gap: 12px; align-items: center;
+    padding: 13px 14px;
     border: 1.5px solid var(--border);
-    border-radius: 10px;
+    border-radius: 9px;
     margin-bottom: 6px;
     background: var(--bg3);
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-color 0.18s, background 0.18s;
   }
-  .criterio-row:hover { border-color: var(--blue-border); background: var(--blue-light); }
-  .criterio-row.rated { background: #EBF2FF; border-color: rgba(26,86,219,0.2); }
+  .criterio-row:hover { border-color: var(--teal-border); background: #f5fafb; }
+  .criterio-row.rated { background: rgba(27,140,168,0.06); border-color: var(--teal-border); }
   .criterio-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); text-align: center; }
-  .criterio-name { font-size: 13px; color: var(--text); }
-  .criterio-pond {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--blue);
-    text-align: center;
-    font-weight: 500;
-  }
+  .criterio-name { font-size: 13px; color: var(--text); font-weight: 400; }
+  .criterio-pond { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--teal); text-align: center; font-weight: 500; }
 
-  .rating-btns {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
+  /* ── RATING BUTTONS ── */
+  .rating-btns { display: flex; gap: 5px; align-items: center; }
   .rating-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+    width: 34px; height: 34px;
+    border-radius: 7px;
     border: 1.5px solid var(--border);
     background: var(--bg2);
     color: var(--text-muted);
     font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 13px; font-weight: 500;
     cursor: pointer;
     transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
-  .rating-btn:hover {
-    border-color: var(--blue);
-    color: var(--blue);
-    background: var(--blue-light);
-  }
+  .rating-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
   .rating-btn.selected-1 { background: var(--red-dim); border-color: var(--red); color: var(--red); }
   .rating-btn.selected-2 { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
-  .rating-btn.selected-3 { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+  .rating-btn.selected-3 { background: rgba(27,140,168,0.09); border-color: var(--teal); color: var(--teal); }
   .rating-btn.selected-4 { background: var(--green-dim); border-color: var(--green); color: var(--green); }
-  .rating-btn.selected-5 { background: #EBF2FF; border-color: #1A56DB; color: #1A56DB; }
+  .rating-btn.selected-5 { background: var(--navy); border-color: var(--navy); color: #fff; }
 
-  textarea {
-    width: 100%;
-    background: var(--bg3);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    resize: vertical;
-    min-height: 90px;
-    outline: none;
-  }
-  textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
-
-  .submit-row { display: flex; justify-content: flex-end; gap: 12px; padding-top: 10px; }
+  /* ── SUBMIT ROW ── */
+  .submit-row { display: flex; justify-content: flex-end; gap: 12px; padding-top: 8px; }
   .btn-secondary {
-    background: var(--bg2);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 24px;
-    color: var(--text-muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
+    background: var(--bg2); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px 24px;
+    color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 13px;
+    cursor: pointer; transition: all 0.2s; font-weight: 500;
   }
-  .btn-secondary:hover { border-color: var(--blue-border); color: var(--blue); }
+  .btn-secondary:hover { border-color: var(--teal-border); color: var(--teal); }
   .btn-primary {
-    background: var(--blue);
-    border: none;
-    border-radius: 10px;
-    padding: 12px 28px;
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(26,86,219,0.25);
+    background: var(--teal); border: none;
+    border-radius: 8px; padding: 12px 28px;
+    color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.02em;
   }
-  .btn-primary:hover { background: var(--blue-hover); box-shadow: 0 4px 14px rgba(26,86,219,0.35); }
+  .btn-primary:hover { background: var(--teal-hover); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
+  /* ── SCORE STRIP ── */
   .score-strip {
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    padding: 14px 32px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 99;
-    box-shadow: 0 -2px 12px rgba(26,86,219,0.12);
+    background: var(--navy);
+    border-top: 2px solid var(--teal);
+    padding: 14px 36px;
+    display: flex; align-items: center; gap: 24px;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
   }
-  .score-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
-  .score-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 28px;
-    font-weight: 500;
-    color: var(--blue);
-    min-width: 60px;
-  }
-  .score-bar-wrap { flex: 1; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; max-width: 400px; }
+  .score-label { font-size: 10px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap; font-weight: 600; }
+  .score-value { font-family: 'DM Mono', monospace; font-size: 30px; font-weight: 500; color: var(--teal); min-width: 68px; }
+  .score-bar-wrap { flex: 1; height: 3px; background: rgba(255,255,255,0.10); border-radius: 2px; overflow: hidden; max-width: 420px; }
   .score-bar { height: 100%; border-radius: 2px; transition: width 0.5s, background 0.4s; }
   .concepto-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    padding: 5px 13px; border-radius: 20px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
   }
   .tipo-badge {
-    width: 32px; height: 32px;
-    border-radius: 8px;
+    width: 32px; height: 32px; border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Mono', monospace;
-    font-size: 16px; font-weight: 500;
+    font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 600;
   }
-  .score-hint { font-size: 11px; color: var(--text-dim); margin-left: auto; white-space: nowrap; }
+  .score-hint { font-size: 11px; color: rgba(255,255,255,0.28); margin-left: auto; white-space: nowrap; }
 
+  /* ── CONCEPTO COLORS ── */
   .state-E { color: var(--red); }
   .state-D { color: var(--amber); }
-  .state-C { color: var(--blue); }
+  .state-C { color: var(--teal); }
   .state-B { color: var(--green); }
-  .state-A { color: #0D6EFD; }
+  .state-A { color: #35C4E0; }
 
-  .badge-E { background: var(--red-dim); color: var(--red); border: 1px solid rgba(192,57,43,0.25); }
-  .badge-D { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(180,83,9,0.25); }
-  .badge-C { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-border); }
-  .badge-B { background: var(--green-dim); color: var(--green); border: 1px solid rgba(14,138,79,0.25); }
-  .badge-A { background: #EBF2FF; color: #1A56DB; border: 1px solid rgba(26,86,219,0.35); }
+  .badge-E { background: var(--red-dim); color: var(--red); border: 1px solid rgba(184,50,50,0.3); }
+  .badge-D { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(160,92,16,0.3); }
+  .badge-C { background: rgba(27,140,168,0.15); color: var(--teal); border: 1px solid var(--teal-border); }
+  .badge-B { background: var(--green-dim); color: var(--green); border: 1px solid rgba(10,124,82,0.28); }
+  .badge-A { background: rgba(53,196,224,0.15); color: #35C4E0; border: 1px solid rgba(53,196,224,0.35); }
 
   .bar-E { background: var(--red); }
   .bar-D { background: var(--amber); }
-  .bar-C { background: var(--blue); }
+  .bar-C { background: var(--teal); }
   .bar-B { background: var(--green); }
-  .bar-A { background: #1A56DB; }
+  .bar-A { background: #35C4E0; }
 
+  /* ── TOAST ── */
+  .toast-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(11,30,52,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999; opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  .toast-overlay.visible { opacity: 1; pointer-events: all; }
+  .toast-box {
+    background: var(--bg2);
+    border-radius: 14px;
+    padding: 28px 32px;
+    max-width: 380px; width: 90%;
+    box-shadow: 0 20px 60px rgba(11,30,52,0.25);
+    border-top: 4px solid var(--teal);
+    text-align: center;
+    transform: translateY(12px);
+    transition: transform 0.25s;
+  }
+  .toast-overlay.visible .toast-box { transform: translateY(0); }
+  .toast-icon { font-size: 36px; margin-bottom: 12px; }
+  .toast-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .toast-msg { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+  .toast-btn {
+    background: var(--teal); color: #fff;
+    border: none; border-radius: 8px;
+    padding: 10px 28px; font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toast-btn:hover { background: var(--teal-hover); }
+  .toast-btn.danger { background: var(--red); }
+  .toast-btn.danger:hover { background: #9e2828; }
+
+  /* ── RESPONSIVE ── */
   @media (max-width: 640px) {
     .type-selector { grid-template-columns: 1fr; }
     .info-grid { grid-template-columns: 1fr; }
-    .criterios-header, .criterio-row { grid-template-columns: 24px 1fr 40px; gap: 8px; }
-    .rating-btns { grid-column: 1 / 4; }
+    .criterios-header { display: none; }
+    .criterio-row { grid-template-columns: 24px 1fr 40px; }
+    .criterio-row .rating-btns { grid-column: 1 / 4; }
     .rating-btn { width: 30px; height: 30px; font-size: 12px; }
     .score-strip { flex-wrap: wrap; gap: 12px; padding: 12px 16px; }
     .score-bar-wrap { max-width: 100%; order: 3; }
     .score-hint { display: none; }
     .header { padding: 0 16px; }
-    .main { padding: 20px 16px 120px; }
+    .header-title { display: none; }
+    .main { padding: 20px 16px 110px; }
   }
 </style>
 <base target="_blank">
-
+</head>
 <body>
+
+<!-- TOAST OVERLAY -->
+<div class="toast-overlay" id="toastOverlay">
+  <div class="toast-box">
+    <div class="toast-icon" id="toastIcon">✅</div>
+    <div class="toast-title" id="toastTitle">Título</div>
+    <div class="toast-msg" id="toastMsg">Mensaje</div>
+    <button class="toast-btn" id="toastBtn" onclick="closeToast()">Aceptar</button>
+  </div>
+</div>
 
 <!-- LOADING SCREEN -->
 <div class="loading-screen" id="loadingScreen">
@@ -358,22 +391,31 @@
 </div>
 
 <header class="header">
-  <div class="header-logo"><span>ARIS MINING</span></div>
-  <div style="text-align:center;">
-    <span style="color:rgba(255,255,255,0.9);font-size:14px;font-weight:500">
-     ARIS MINING EVALUACIÓN DE DESEMPEÑO PROVEEDORES
-    </span>
+  <div class="header-left">
+    <!-- Logo mark Aris Mining (M geométrico) -->
+    <div class="logo-mark">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="18,4 32,32 24,32 18,20 12,32 4,32" fill="#1B8CA8"/>
+        <polygon points="18,14 24,32 12,32" fill="#0B1E34"/>
+      </svg>
+    </div>
+    <div class="brand-name">
+      <span class="brand-aris">ARIS</span>
+      <span class="brand-mining">MINING</span>
+    </div>
+    <span class="header-title">Evaluación de Desempeño Proveedores</span>
   </div>
-  <span class="header-code"></span>
-  <span class="user-info" id="userName"></span>
-  <button class="btn-secondary" onclick="logout()">Cerrar sesión</button>
+  <div class="header-right">
+    <span class="user-info" id="userName"></span>
+    <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+  </div>
 </header>
 
 <main class="main">
 
-  <!-- COMBOBOX DE CONTRATOS -->
+  <!-- CONTRATOS -->
   <div class="card" id="contratosCard" style="display:none;">
-    <div class="section-label">Seleccionar contrato</div>
+    <div class="section-head"><div class="section-line"></div><div class="section-label">Seleccionar contrato</div></div>
     <div class="field-group">
       <label>Contrato / Orden de compra</label>
       <select class="contrato-select" id="contratoSelect" onchange="seleccionarContrato()">
@@ -383,28 +425,28 @@
     <div class="contrato-info" id="contratoInfo" style="display:none;"></div>
   </div>
 
-  <!-- TIPO DE CONTRATO (auto-seleccionado) -->
+  <!-- TIPO -->
   <div class="card" id="tipoCard" style="display:none;">
-    <div class="section-label">Tipo de contrato / servicio</div>
+    <div class="section-head"><div class="section-line"></div><div class="section-label">Tipo de contrato / servicio</div></div>
     <div class="type-selector">
       <button class="type-btn" id="btn-servicios" disabled>
         <div class="type-btn-code">F-COM-007</div>
-        <div class="type-btn-label">PROVEEDORES DE SERVICIOS U OBRAS</div>
+        <div class="type-btn-label">Proveedores de servicios u obras</div>
       </button>
       <button class="type-btn" id="btn-consultoria" disabled>
         <div class="type-btn-code">F-COM-016</div>
-        <div class="type-btn-label">PROVEEDORES DE CONSULTORÍA</div>
+        <div class="type-btn-label">Proveedores de consultoría</div>
       </button>
       <button class="type-btn" id="btn-bienes" disabled>
         <div class="type-btn-code">F-COM-008</div>
-        <div class="type-btn-label">PROVEEDORES DE BIENES</div>
+        <div class="type-btn-label">Proveedores de bienes</div>
       </button>
     </div>
   </div>
 
-  <!-- DATOS PROVEEDOR (auto-completados) -->
+  <!-- DATOS PROVEEDOR -->
   <div class="card" id="datosCard" style="display:none;">
-    <div class="section-label">Datos del proveedor</div>
+    <div class="section-head"><div class="section-line"></div><div class="section-label">Datos del proveedor</div></div>
     <div class="info-grid">
       <div class="field-group">
         <label>Nombre / Razón social</label>
@@ -425,9 +467,9 @@
     </div>
   </div>
 
-  <!-- CRITERIOS DE EVALUACIÓN -->
+  <!-- CRITERIOS -->
   <div class="card" id="criteriosCard" style="display:none;">
-    <div class="section-label" id="criteriosTitle">Criterios de evaluación</div>
+    <div class="section-head"><div class="section-line"></div><div class="section-label" id="criteriosTitle">Criterios de evaluación</div></div>
     <div class="criterios-header">
       <span>#</span><span>Criterio</span><span style="text-align:center">Pond.</span><span>Calificación (1–5)</span>
     </div>
@@ -436,7 +478,7 @@
 
   <!-- OBSERVACIONES -->
   <div class="card" id="obsCard" style="display:none;">
-    <div class="section-label">Recomendaciones / observaciones</div>
+    <div class="section-head"><div class="section-line"></div><div class="section-label">Recomendaciones / observaciones</div></div>
     <textarea id="observaciones" placeholder="Ingrese recomendaciones del administrador del contrato..."></textarea>
   </div>
 
@@ -448,7 +490,7 @@
 
 </main>
 
-<!-- SCORE BAR -->
+<!-- SCORE STRIP -->
 <div class="score-strip" id="scoreStrip">
   <div>
     <div class="score-label">Calificación total</div>
@@ -462,18 +504,11 @@
   <span class="score-hint">5 = Excelente · 1 = Muy deficiente</span>
 </div>
 
-<!-- Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
-// ============================================================
-// CONFIGURACIÓN - Se carga desde /api/config
-// ============================================================
 let supabaseClient = null;
 
-// ============================================================
-// CRITERIOS POR TIPO DE CONTRATO
-// ============================================================
 const TIPOS = {
   'F-COM-007': {
     label: 'Servicios u obras',
@@ -513,217 +548,159 @@ const TIPOS = {
 };
 
 const RANGOS = [
-  { min: 4.5, max: 5.0, concepto: 'EXCELENTE', tipo: 'A' },
-  { min: 3.5, max: 4.49, concepto: 'BUENO', tipo: 'B' },
-  { min: 2.5, max: 3.49, concepto: 'ACEPTABLE', tipo: 'C' },
-  { min: 1.5, max: 2.49, concepto: 'DEFICIENTE', tipo: 'D' },
-  { min: 0, max: 1.49, concepto: 'MUY DEFICIENTE', tipo: 'E' },
+  { min: 4.5, max: 5.0, concepto: 'EXCELENTE',      tipo: 'A' },
+  { min: 3.5, max: 4.49,concepto: 'BUENO',           tipo: 'B' },
+  { min: 2.5, max: 3.49,concepto: 'ACEPTABLE',       tipo: 'C' },
+  { min: 1.5, max: 2.49,concepto: 'DEFICIENTE',      tipo: 'D' },
+  { min: 0,   max: 1.49,concepto: 'MUY DEFICIENTE',  tipo: 'E' },
 ];
 
-// ============================================================
-// VARIABLES GLOBALES
-// ============================================================
 let usuarioActual = null;
 let contratosData = [];
 let contratoSeleccionado = null;
 let notas = {};
 let tipoActual = '';
+let toastCallback = null;
 
-// ============================================================
-// INICIALIZACIÓN
-// ============================================================
+/* ── TOAST ── */
+function showToast({ icon = '✅', title = '', msg = '', btnText = 'Aceptar', btnClass = '', cb = null } = {}) {
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent = msg;
+  const btn = document.getElementById('toastBtn');
+  btn.textContent = btnText;
+  btn.className = 'toast-btn' + (btnClass ? ' ' + btnClass : '');
+  toastCallback = cb;
+  document.getElementById('toastOverlay').classList.add('visible');
+}
+function closeToast() {
+  document.getElementById('toastOverlay').classList.remove('visible');
+  if (toastCallback) { toastCallback(); toastCallback = null; }
+}
+
+/* ── INIT ── */
 async function inicializar() {
   try {
-    console.log('1. Cargando config...');
     const configResp = await fetch('/api/config');
-    console.log('Config status:', configResp.status);
-    
     if (!configResp.ok) throw new Error('No se pudo cargar config: ' + configResp.status);
     const config = await configResp.json();
-    console.log('Config recibida');
 
-    console.log('2. Inicializando Supabase...');
-    if (!window.supabase) {
-      throw new Error('Supabase JS no se cargó. Verifica la conexión a internet.');
-    }
+    if (!window.supabase) throw new Error('Supabase JS no se cargó. Verifica tu conexión.');
     supabaseClient = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
-    console.log('Supabase inicializado');
 
-    console.log('3. Cargando /api/me...');
     const resp = await fetch('/api/me');
-    console.log('/api/me status:', resp.status);
-    
-    if (!resp.ok) {
-      console.log('No autenticado, redirigiendo...');
-      window.location.href = '/login.html';
-      return;
-    }
+    if (!resp.ok) { window.location.href = '/login.html'; return; }
 
     usuarioActual = await resp.json();
-    console.log('Usuario:', usuarioActual);
+    document.getElementById('userName').textContent = usuarioActual.name || usuarioActual.email || 'Usuario';
 
-    document.getElementById('userName').textContent = 
-      usuarioActual.name || usuarioActual.email || 'Usuario';
-
-    console.log('4. Cargando contratos...');
     await cargarContratos();
-
     document.getElementById('loadingScreen').style.display = 'none';
 
   } catch (err) {
-    console.error('ERROR en inicializar:', err);
     document.getElementById('loadingScreen').innerHTML = `
-      <p style="color:var(--red)">Error: ${err.message}</p>
+      <p style="color:#B83232;font-size:13px;margin-bottom:16px">Error: ${err.message}</p>
       <button class="btn-secondary" onclick="window.location.href='/login.html'">Ir al login</button>
     `;
   }
 }
 
-// ============================================================
-// CARGAR CONTRATOS DESDE SUPABASE
-// ============================================================
+/* ── CONTRATOS ── */
 async function cargarContratos() {
   const correo = usuarioActual.email;
-
   if (!correo) {
-    console.error('No se encontró email del usuario. usuarioActual:', usuarioActual);
     document.getElementById('contratoSelect').innerHTML = '<option value="">Error: sin email de usuario</option>';
     document.getElementById('contratosCard').style.display = 'block';
     return;
   }
-
   try {
     const { data, error } = await supabaseClient
-      .from('v_mis_contratos')
-      .select('*')
-      .eq('correo_evaluador', correo)
-      .eq('estado_asignacion', 'pendiente');
-
-    if (error) {
-      console.error('Error Supabase:', error);
-      throw error;
-    }
-
+      .from('v_mis_contratos').select('*')
+      .eq('correo_evaluador', correo).eq('estado_asignacion', 'pendiente');
+    if (error) throw error;
     contratosData = data || [];
-
     if (contratosData.length === 0) {
       document.getElementById('contratoSelect').innerHTML = '<option value="">No tienes contratos pendientes</option>';
       document.getElementById('contratosCard').style.display = 'block';
       return;
     }
-
     let html = '<option value="">Seleccionar contrato...</option>';
     contratosData.forEach(c => {
       html += `<option value="${c.id_contrato}">${c.codigo_contrato} - ${c.razon_social}</option>`;
     });
     document.getElementById('contratoSelect').innerHTML = html;
     document.getElementById('contratosCard').style.display = 'block';
-
   } catch (err) {
-    console.error('Error cargando contratos:', err);
     document.getElementById('contratoSelect').innerHTML = '<option value="">Error al cargar contratos</option>';
     document.getElementById('contratosCard').style.display = 'block';
   }
 }
 
-// ============================================================
-// SELECCIONAR CONTRATO
-// ============================================================
 function seleccionarContrato() {
   const id = document.getElementById('contratoSelect').value;
-
-  if (!id) {
-    ocultarFormulario();
-    return;
-  }
-
+  if (!id) { ocultarFormulario(); return; }
   contratoSeleccionado = contratosData.find(c => c.id_contrato === id);
   if (!contratoSeleccionado) return;
 
-  document.getElementById('provNombre').value = contratoSeleccionado.razon_social || '';
-  document.getElementById('provNIT').value = contratoSeleccionado.nit || '';
+  document.getElementById('provNombre').value  = contratoSeleccionado.razon_social || '';
+  document.getElementById('provNIT').value     = contratoSeleccionado.nit || '';
   document.getElementById('provPeriodo').value = contratoSeleccionado.periodo_evaluacion || '';
-  document.getElementById('provOperacion').value = contratoSeleccionado.operacion || '';
+  document.getElementById('provOperacion').value= contratoSeleccionado.operacion || '';
 
   tipoActual = contratoSeleccionado.tipo_contrato;
   mostrarTipoContrato(tipoActual);
 
   document.getElementById('contratoInfo').innerHTML = `
-    <strong>Contrato:</strong> ${contratoSeleccionado.codigo_contrato || ''}<br>
-    <strong>Tipo:</strong> ${tipoActual || ''}<br>
+    <strong>Contrato:</strong> ${contratoSeleccionado.codigo_contrato || ''}&nbsp;&nbsp;
+    <strong>Tipo:</strong> ${tipoActual || ''}&nbsp;&nbsp;
     <strong>Estado:</strong> ${contratoSeleccionado.estado_asignacion || ''}
   `;
   document.getElementById('contratoInfo').style.display = 'block';
-
   mostrarFormulario();
   renderCriterios();
   updateScore();
 }
 
 function mostrarTipoContrato(tipo) {
-  ['servicios', 'consultoria', 'bienes'].forEach(t => {
-    document.getElementById(`btn-${t}`).classList.remove('active');
-  });
-
-  const mapTipo = {
-    'F-COM-007': 'servicios',
-    'F-COM-016': 'consultoria',
-    'F-COM-008': 'bienes'
-  };
-
-  const btnId = mapTipo[tipo];
-  if (btnId) {
-    document.getElementById(`btn-${btnId}`).classList.add('active');
-  }
+  ['servicios','consultoria','bienes'].forEach(t => document.getElementById(`btn-${t}`).classList.remove('active'));
+  const map = { 'F-COM-007':'servicios','F-COM-016':'consultoria','F-COM-008':'bienes' };
+  if (map[tipo]) document.getElementById(`btn-${map[tipo]}`).classList.add('active');
 }
 
 function mostrarFormulario() {
-  document.getElementById('tipoCard').style.display = 'block';
-  document.getElementById('datosCard').style.display = 'block';
-  document.getElementById('criteriosCard').style.display = 'block';
-  document.getElementById('obsCard').style.display = 'block';
-  document.getElementById('submitRow').style.display = 'flex';
+  ['tipoCard','datosCard','criteriosCard','obsCard','submitRow'].forEach(id => {
+    document.getElementById(id).style.display = id === 'submitRow' ? 'flex' : 'block';
+  });
 }
-
 function ocultarFormulario() {
-  document.getElementById('tipoCard').style.display = 'none';
-  document.getElementById('datosCard').style.display = 'none';
-  document.getElementById('criteriosCard').style.display = 'none';
-  document.getElementById('obsCard').style.display = 'none';
-  document.getElementById('submitRow').style.display = 'none';
+  ['tipoCard','datosCard','criteriosCard','obsCard','submitRow'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
   document.getElementById('contratoInfo').style.display = 'none';
 }
 
-// ============================================================
-// CRITERIOS Y CALIFICACIÓN
-// ============================================================
+/* ── CRITERIOS ── */
 function renderCriterios() {
   const criterios = TIPOS[tipoActual]?.criterios || [];
-  document.getElementById('criteriosTitle').textContent = 
+  document.getElementById('criteriosTitle').textContent =
     `Criterios de evaluación — ${TIPOS[tipoActual]?.label || ''}`;
-
   const list = document.getElementById('criteriosList');
   list.innerHTML = '';
-
   criterios.forEach((c, i) => {
     const notaActual = notas[c.nombre] || null;
-
     const row = document.createElement('div');
     row.className = `criterio-row${notaActual ? ' rated' : ''}`;
     row.id = `row-${i}`;
-
-    let botonesHTML = '';
+    let btns = '';
     for (let v = 1; v <= 5; v++) {
-      const isSelected = notaActual === v;
-      const selClass = isSelected ? ` selected-${v}` : '';
-      botonesHTML += `<button class="rating-btn${selClass}" onclick="setNota('${c.nombre}', ${v}, ${i})">${v}</button>`;
+      const sel = notaActual === v ? ` selected-${v}` : '';
+      btns += `<button class="rating-btn${sel}" onclick="setNota('${c.nombre}',${v},${i})">${v}</button>`;
     }
-
     row.innerHTML = `
       <span class="criterio-num">${i+1}</span>
       <span class="criterio-name">${c.nombre}</span>
       <span class="criterio-pond">${c.pond}%</span>
-      <div class="rating-btns">${botonesHTML}</div>
+      <div class="rating-btns">${btns}</div>
     `;
     list.appendChild(row);
   });
@@ -731,215 +708,134 @@ function renderCriterios() {
 
 function setNota(nombre, valor, idx) {
   notas[nombre] = valor;
-
   const row = document.getElementById(`row-${idx}`);
-  if (row) row.className = 'criterio-row rated';
-
-  const btns = row.querySelectorAll('.rating-btn');
-  btns.forEach((btn, i) => {
+  row.className = 'criterio-row rated';
+  row.querySelectorAll('.rating-btn').forEach((btn, i) => {
     const v = i + 1;
     btn.className = v === valor ? `rating-btn selected-${v}` : 'rating-btn';
   });
-
   updateScore();
 }
 
 function calcularTotal() {
   const criterios = TIPOS[tipoActual]?.criterios || [];
   let totalPond = 0, weightedSum = 0;
-
   for (const c of criterios) {
     const n = notas[c.nombre];
-    if (n != null) {
-      weightedSum += n * c.pond;
-      totalPond += c.pond;
-    }
+    if (n != null) { weightedSum += n * c.pond; totalPond += c.pond; }
   }
-
   if (totalPond === 0) return null;
   return Math.round((weightedSum / totalPond) * 100) / 100;
 }
 
 function getConcepto(score) {
   if (score === null || score < 0) return null;
-  for (const r of RANGOS) {
-    if (score >= r.min && score <= r.max) return r;
-  }
+  for (const r of RANGOS) if (score >= r.min && score <= r.max) return r;
   return RANGOS[4];
 }
 
 function updateScore() {
   const score = calcularTotal();
-  const numEl = document.getElementById('scoreNum');
-  const barEl = document.getElementById('scoreBar');
+  const numEl  = document.getElementById('scoreNum');
+  const barEl  = document.getElementById('scoreBar');
   const concEl = document.getElementById('conceptoBadge');
   const tipoEl = document.getElementById('tipoBadge');
-
   if (score === null) {
-    numEl.textContent = '—';
-    numEl.className = 'score-value';
-    barEl.style.width = '0%';
-    barEl.className = 'score-bar';
-    concEl.style.opacity = '0';
-    tipoEl.style.opacity = '0';
+    numEl.textContent = '—'; numEl.className = 'score-value';
+    barEl.style.width = '0%'; barEl.className = 'score-bar';
+    concEl.style.opacity = '0'; tipoEl.style.opacity = '0';
     return;
   }
-
   const res = getConcepto(score);
   const pct = Math.max(0, Math.min(100, ((score - 1) / 4) * 100));
-
-  numEl.textContent = score.toFixed(2);
-  numEl.className = `score-value state-${res.tipo}`;
-  barEl.style.width = pct.toFixed(1) + '%';
-  barEl.className = `score-bar bar-${res.tipo}`;
-  concEl.textContent = res.concepto;
-  concEl.className = `concepto-badge badge-${res.tipo}`;
-  concEl.style.opacity = '1';
-  tipoEl.textContent = res.tipo;
-  tipoEl.className = `tipo-badge badge-${res.tipo}`;
-  tipoEl.style.opacity = '1';
+  numEl.textContent = score.toFixed(2); numEl.className = `score-value state-${res.tipo}`;
+  barEl.style.width = pct.toFixed(1) + '%'; barEl.className = `score-bar bar-${res.tipo}`;
+  concEl.textContent = res.concepto; concEl.className = `concepto-badge badge-${res.tipo}`; concEl.style.opacity = '1';
+  tipoEl.textContent = res.tipo; tipoEl.className = `tipo-badge badge-${res.tipo}`; tipoEl.style.opacity = '1';
 }
 
-// ============================================================
-// ENVIAR EVALUACIÓN POR EMAIL (JSON oculto en HTML para Power Automate)
-// ============================================================
+/* ── ENVIAR ── */
 async function enviarEvaluacionEmail() {
   if (!contratoSeleccionado) {
-    alert('Selecciona un contrato primero');
-    return;
+    showToast({ icon:'⚠️', title:'Contrato requerido', msg:'Selecciona un contrato primero.' }); return;
   }
-
   const score = calcularTotal();
   if (score === null) {
-    alert('Por favor califica al menos un criterio');
-    return;
+    showToast({ icon:'⚠️', title:'Calificación incompleta', msg:'Por favor califica al menos un criterio.' }); return;
   }
-
   const res = getConcepto(score);
-
-  // Construir array de criterios calificados
   const criteriosArray = [];
   const criterios = TIPOS[tipoActual]?.criterios || [];
   criterios.forEach(c => {
     if (notas[c.nombre] != null) {
       criteriosArray.push({
-        criterio: c.nombre,
-        ponderacion: c.pond,
-        calificacion: notas[c.nombre],
+        criterio: c.nombre, ponderacion: c.pond, calificacion: notas[c.nombre],
         puntaje: Number((notas[c.nombre] * c.pond / 100).toFixed(2))
       });
     }
   });
-
-  // Datos para Power Automate
   const datosPA = {
     id: crypto.randomUUID(),
     fechaEvaluacion: new Date().toISOString().split('T')[0],
-    evaluador: {
-      nombre: usuarioActual.name || usuarioActual.email,
-      email: usuarioActual.email
-    },
-    proveedor: {
-      razonSocial: contratoSeleccionado.razon_social,
-      nit: contratoSeleccionado.nit,
-      operacion: contratoSeleccionado.operacion || ''
-    },
-    contrato: {
-      codigo: contratoSeleccionado.codigo_contrato,
-      tipo: tipoActual,
-      tipoNombre: TIPOS[tipoActual]?.label || '',
-      periodo: contratoSeleccionado.periodo_evaluacion || ''
-    },
-    resultados: {
-      criterios: criteriosArray,
-      calificacionTotal: Number(score.toFixed(2)),
-      concepto: res.concepto,
-      tipo: res.tipo
-    },
+    evaluador: { nombre: usuarioActual.name || usuarioActual.email, email: usuarioActual.email },
+    proveedor: { razonSocial: contratoSeleccionado.razon_social, nit: contratoSeleccionado.nit, operacion: contratoSeleccionado.operacion || '' },
+    contrato: { codigo: contratoSeleccionado.codigo_contrato, tipo: tipoActual, tipoNombre: TIPOS[tipoActual]?.label || '', periodo: contratoSeleccionado.periodo_evaluacion || '' },
+    resultados: { criterios: criteriosArray, calificacionTotal: Number(score.toFixed(2)), concepto: res.concepto, tipo: res.tipo },
     observaciones: document.getElementById('observaciones').value || ''
   };
-
-  // Guardar en Supabase
   try {
-    const { data, error } = await supabaseClient
-      .from('evaluaciones')
-      .insert([{
-        id_asignacion: contratoSeleccionado.id_asignacion,
-        id_contrato: contratoSeleccionado.id_contrato,
-        proveedor_nombre: contratoSeleccionado.razon_social,
-        nit: contratoSeleccionado.nit,
-        periodo: contratoSeleccionado.periodo_evaluacion,
-        operacion: contratoSeleccionado.operacion,
-        tipo: tipoActual,
-        calificacion_total: score,
-        concepto: res.concepto,
-        tipo_calificacion: res.tipo,
-        criterios: criteriosArray,
-        observaciones: datosPA.observaciones,
-        evaluador_email: usuarioActual.email
-      }])
-      .select();
-
+    const { data, error } = await supabaseClient.from('evaluaciones').insert([{
+      id_asignacion: contratoSeleccionado.id_asignacion,
+      id_contrato: contratoSeleccionado.id_contrato,
+      proveedor_nombre: contratoSeleccionado.razon_social,
+      nit: contratoSeleccionado.nit,
+      periodo: contratoSeleccionado.periodo_evaluacion,
+      operacion: contratoSeleccionado.operacion,
+      tipo: tipoActual,
+      calificacion_total: score,
+      concepto: res.concepto,
+      tipo_calificacion: res.tipo,
+      criterios: criteriosArray,
+      observaciones: datosPA.observaciones,
+      evaluador_email: usuarioActual.email
+    }]).select();
     if (error) throw error;
-
-    // Actualizar asignación
-    await supabaseClient
-      .from('asignaciones')
-      .update({ 
-        estado_asignacion: 'completado',
-        id_evaluacion: data[0].id
-      })
+    await supabaseClient.from('asignaciones')
+      .update({ estado_asignacion: 'completado', id_evaluacion: data[0].id })
       .eq('id', contratoSeleccionado.id_asignacion);
-
-    // Enviar a API de email (nodemailer en backend)
     const emailResponse = await fetch('/api/enviar-evaluacion', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ datosPA })
     });
-
     if (!emailResponse.ok) {
       const errorData = await emailResponse.json();
       throw new Error(errorData.error || 'Error enviando email');
     }
-
-    console.log('📧 Datos para PA:', JSON.stringify(datosPA, null, 2));
-
-    alert('Evaluación guardada y notificación enviada a pablo.alzate@aris-mining.co');
-    resetForm();
-    cargarContratos();
-
+    showToast({
+      icon: '✅',
+      title: 'Evaluación enviada',
+      msg: 'La evaluación fue guardada y la notificación enviada correctamente.',
+      cb: () => { resetForm(); cargarContratos(); }
+    });
   } catch (err) {
-    console.error('Error:', err);
-    alert('Error al procesar: ' + err.message);
+    showToast({ icon: '❌', title: 'Error al procesar', msg: err.message, btnClass: 'danger' });
   }
 }
 
 function resetForm() {
-  notas = {};
-  contratoSeleccionado = null;
-  tipoActual = '';
-
+  notas = {}; contratoSeleccionado = null; tipoActual = '';
   document.getElementById('contratoSelect').value = '';
   document.getElementById('observaciones').value = '';
-
-  ocultarFormulario();
-  updateScore();
+  ocultarFormulario(); updateScore();
 }
 
 async function logout() {
-  try {
-    await fetch('/api/logout');
-  } catch (e) {
-    console.error('Error logout:', e);
-  }
+  try { await fetch('/api/logout'); } catch(e) {}
   window.location.href = '/login.html';
 }
 
 window.onload = inicializar;
 </script>
-
 </body>
 </html>
