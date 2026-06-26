@@ -43,6 +43,8 @@ export default async function handler(req, res) {
     user: {
       name: me.displayName || me.userPrincipalName || "Usuario",
       email: me.mail || me.userPrincipalName || "",
+      department: me.department || "Sin departamento",
+      jobTitle: me.jobTitle || "Sin cargo"
     },
     access_token: tokenData.access_token,
     time: Date.now()
