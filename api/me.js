@@ -21,15 +21,15 @@ export default async function handler(req, res) {
   try {
     session = JSON.parse(Buffer.from(cookies.session, 'base64').toString('utf8'));
   } catch (err) {
-    console.error('Error decodificando sesión:', err);
     return res.status(401).json({ authenticated: false, error: 'invalid_session' });
   }
 
-  console.log('👤 USUARIO CONECTADO:', {
+  console.log('👤 USUARIO:', {
     nombre: session.user?.name,
     email: session.user?.email,
     departamento: session.user?.department,
-    cargo: session.user?.jobTitle
+    cargo: session.user?.jobTitle,
+    empresa: session.user?.companyName
   });
 
   return res.status(200).json({
@@ -37,6 +37,7 @@ export default async function handler(req, res) {
     name: session.user?.name || 'Usuario',
     email: session.user?.email || '',
     department: session.user?.department || 'Sin departamento',
-    jobTitle: session.user?.jobTitle || 'Sin cargo'
+    jobTitle: session.user?.jobTitle || 'Sin cargo',
+    companyName: session.user?.companyName || ''
   });
 }
