@@ -2,8 +2,6 @@
 export default async function handler(req, res) {
   const cookieHeader = req.headers.cookie || '';
   
-  console.log('Cookie header recibido:', cookieHeader); // Debug log
-  
   const cookies = Object.fromEntries(
     cookieHeader
       .split(';')
@@ -15,8 +13,6 @@ export default async function handler(req, res) {
       })
   );
 
-  console.log('Cookies parseadas:', Object.keys(cookies)); // Debug log
-
   if (!cookies.session) {
     return res.status(401).json({ authenticated: false, error: 'no_session_cookie' });
   }
@@ -24,15 +20,30 @@ export default async function handler(req, res) {
   let session;
   try {
     session = JSON.parse(Buffer.from(cookies.session, 'base64').toString('utf8'));
-    console.log('Sesión decodificada:', session); // Debug log
   } catch (err) {
     console.error('Error decodificando sesión:', err);
     return res.status(401).json({ authenticated: false, error: 'invalid_session' });
   }
 
+  // Log para debug - muestra el departamento en los logs de Vercel
+  console.log('👤 USUARIO CONECTADO:', {
+    nombre: session.user?.name,
+    email: session.user?.email,
+    departamento: session.user?.department,
+    cargo: session.user?.jobTitle,
+    empresa: session.user?.companyName,
+    ubicacion: session.user?.officeLocation
+  });
+
   return res.status(200).json({
     authenticated: true,
     name: session.user?.name || 'Usuario',
-    email: session.user?.email || ''
+    email: session.user?.email || '',
+    department: session.user?.department || 'Sin departamento',
+    jobTitle: session.user?.jobTitle || 'Sin cargo',
+    officeLocation: session.user?.officeLocation || 'Sin ubicación',
+    companyName: session.user?.companyName || '',
+    city: session.user?.city || '',
+    country: session.user?.country || ''
   });
 }
