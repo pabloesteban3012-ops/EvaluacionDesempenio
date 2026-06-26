@@ -29,7 +29,7 @@ export default async function handler(req, res) {
   console.log('👤 USUARIO CONECTADO:', {
     nombre: session.user?.name,
     email: session.user?.email,
-    departamento: session.user?.Department,
+    departamento: session.user?.Departamento,
     cargo: session.user?.Title,
     empresa: session.user?.companyName,
     ubicacion: session.user?.officeLocation
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     authenticated: true,
     name: session.user?.name || 'Usuario',
     email: session.user?.email || '',
-    department: session.user?.Department || 'Sin departamento',
+    department: session.user?.Departamento || 'Sin departamento',
     jobTitle: session.user?.Title || 'Sin cargo',
     officeLocation: session.user?.officeLocation || 'Sin ubicación',
     companyName: session.user?.companyName || '',
