@@ -25,25 +25,18 @@ export default async function handler(req, res) {
     return res.status(401).json({ authenticated: false, error: 'invalid_session' });
   }
 
-  // Log para debug - muestra el departamento en los logs de Vercel
   console.log('👤 USUARIO CONECTADO:', {
     nombre: session.user?.name,
     email: session.user?.email,
-    departamento: session.user?.Departamento,
-    cargo: session.user?.Title,
-    empresa: session.user?.companyName,
-    ubicacion: session.user?.officeLocation
+    departamento: session.user?.department,
+    cargo: session.user?.jobTitle
   });
 
   return res.status(200).json({
     authenticated: true,
     name: session.user?.name || 'Usuario',
     email: session.user?.email || '',
-    department: session.user?.Departamento || 'Sin departamento',
-    jobTitle: session.user?.Title || 'Sin cargo',
-    officeLocation: session.user?.officeLocation || 'Sin ubicación',
-    companyName: session.user?.companyName || '',
-    city: session.user?.city || '',
-    country: session.user?.country || ''
+    department: session.user?.department || 'Sin departamento',
+    jobTitle: session.user?.jobTitle || 'Sin cargo'
   });
 }
