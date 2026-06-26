@@ -33,9 +33,13 @@ export default async function handler(req, res) {
     return res.status(400).json(tokenData)
   }
 
-  const meResponse = await fetch("https://graph.microsoft.com/v1.0/me", {
-    headers: { Authorization: `Bearer ${tokenData.access_token}` },
-  })
+  // ✅ CON $select - esto es lo que faltaba
+  const meResponse = await fetch(
+    "https://graph.microsoft.com/v1.0/me?$select=displayName,mail,department,jobTitle,companyName",
+    {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    }
+  )
 
   const me = await meResponse.json()
 
@@ -44,14 +48,15 @@ export default async function handler(req, res) {
       name: me.displayName || me.userPrincipalName || "Usuario",
       email: me.mail || me.userPrincipalName || "",
       department: me.department || "Sin departamento",
-      jobTitle: me.jobTitle || "Sin cargo"
+      jobTitle: me.jobTitle || "Sin cargo",
+      companyName: me.companyName || ""
     },
     access_token: tokenData.access_token,
     time: Date.now()
   })).toString("base64")
 
-  // Cookie simple sin HttpOnly para probar
-  const sessionCookie = `session=${sessionPayload}; Path=/; Max-Age=86400; SameSite=Lax`
+  const isProd = process.env.VERCEL_ENV === "production"
+  const sessionCookie = `session=${sessionPayload}; Path=/; Max-Age=86400; SameSite=${isProd ? "None" : "Lax"}${isProd ? "; Secure" : ""}`
 
   res.setHeader("Set-Cookie", [
     sessionCookie,
