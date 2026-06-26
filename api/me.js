@@ -29,8 +29,8 @@ export default async function handler(req, res) {
   console.log('👤 USUARIO CONECTADO:', {
     nombre: session.user?.name,
     email: session.user?.email,
-    departamento: session.user?.department,
-    cargo: session.user?.jobTitle,
+    departamento: session.user?.Department,
+    cargo: session.user?.Title,
     empresa: session.user?.companyName,
     ubicacion: session.user?.officeLocation
   });
