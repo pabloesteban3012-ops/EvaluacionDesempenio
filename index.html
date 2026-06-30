@@ -1262,6 +1262,15 @@ async function enviarEvaluacionEmail() {
   if (score === null) {
     showToast({ icon:'⚠️', title:'Calificación incompleta', msg:'Por favor califica al menos un criterio.' }); return;
   }
+  const observaciones = document.getElementById('observaciones').value.trim();
+  if (!observaciones) {
+    showToast({ 
+      icon:'⚠️', 
+      title:'Observaciones requeridas', 
+      msg:'Debes ingresar recomendaciones u observaciones antes de enviar la evaluación.' 
+    }); 
+    return;
+  }
   const res = getConcepto(score);
   const criteriosArray = [];
   const criterios = TIPOS[tipoActual]?.criterios || [];
@@ -1285,7 +1294,7 @@ async function enviarEvaluacionEmail() {
     proveedor: { razonSocial: contratoSeleccionado.razon_social, nit: contratoSeleccionado.nit, operacion: contratoSeleccionado.operacion || '' },
     contrato: { codigo: contratoSeleccionado.codigo_contrato, tipo: tipoActual, tipoNombre: TIPOS[tipoActual]?.label || '', periodo: contratoSeleccionado.periodo_evaluacion || '' },
     resultados: { criterios: criteriosArray, calificacionTotal: Number(score.toFixed(2)), concepto: res.concepto, tipo: res.tipo },
-    observaciones: document.getElementById('observaciones').value || ''
+    observaciones: observaciones
   };
   try {
     const { data, error } = await supabaseClient.from('evaluaciones').insert([{
