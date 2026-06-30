@@ -1276,7 +1276,12 @@ async function enviarEvaluacionEmail() {
   const datosPA = {
     id: crypto.randomUUID(),
     fechaEvaluacion: new Date().toISOString().split('T')[0],
-    evaluador: { nombre: usuarioActual.name || usuarioActual.email, email: usuarioActual.email },
+    evaluador: {
+       nombre: usuarioActual.name || usuarioActual.email,
+       email: usuarioActual.email,
+       departamento: usuarioActual.department || '',
+       area: usuarioActual.area || ''
+     },
     proveedor: { razonSocial: contratoSeleccionado.razon_social, nit: contratoSeleccionado.nit, operacion: contratoSeleccionado.operacion || '' },
     contrato: { codigo: contratoSeleccionado.codigo_contrato, tipo: tipoActual, tipoNombre: TIPOS[tipoActual]?.label || '', periodo: contratoSeleccionado.periodo_evaluacion || '' },
     resultados: { criterios: criteriosArray, calificacionTotal: Number(score.toFixed(2)), concepto: res.concepto, tipo: res.tipo },
