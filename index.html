@@ -1256,7 +1256,7 @@ function updateScore() {
 /* ── ENVIAR ── */
 async function enviarEvaluacionEmail() {
   if (!contratoSeleccionado) {
-    showToast({ icon:'<img src="https://cdn.jsdelivr.net/gh/pabloesteban3012-ops/EvaluacionDesempenio@main/assets/warning_icon_172115.svg" style="width:36px;height:36px;">', title:'Contrato requerido', msg:'Selecciona un contrato primero.' }); return;
+    showToast({ icon:'⚠️', title:'Contrato requerido', msg:'Selecciona un contrato primero.' }); return;
   }
   const score = calcularTotal();
   if (score === null) {
@@ -1265,7 +1265,7 @@ async function enviarEvaluacionEmail() {
   const observaciones = document.getElementById('observaciones').value.trim();
   if (!observaciones) {
     showToast({ 
-      icon:'<img src="https://cdn.jsdelivr.net/gh/pabloesteban3012-ops/EvaluacionDesempenio@main/assets/warning_icon_172115.svg" style="width:36px;height:36px;">', 
+      icon:'⚠️', 
       title:'Observaciones requeridas', 
       msg:'Debes ingresar recomendaciones u observaciones antes de enviar la evaluación.' 
     }); 
