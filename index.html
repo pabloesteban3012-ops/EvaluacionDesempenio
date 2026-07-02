@@ -333,7 +333,16 @@
     transition: transform 0.25s;
   }
   .toast-overlay.visible .toast-box { transform: translateY(0); }
-  .toast-icon { font-size: 36px; margin-bottom: 12px; }
+  .toast-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .toast-icon svg { width: 26px; height: 26px; }
+  .toast-icon.success { background: var(--green-dim); color: var(--green); }
+  .toast-icon.warning { background: var(--amber-dim); color: var(--amber); }
+  .toast-icon.error   { background: var(--red-dim);   color: var(--red); }
+  .toast-icon.info     { background: var(--teal-light); color: var(--teal); }
   .toast-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
   .toast-msg { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
   .toast-btn {
@@ -543,7 +552,7 @@
 <!-- TOAST OVERLAY -->
 <div class="toast-overlay" id="toastOverlay">
   <div class="toast-box">
-    <div class="toast-icon" id="toastIcon">✅</div>
+    <div class="toast-icon" id="toastIcon"></div>
     <div class="toast-title" id="toastTitle">Título</div>
     <div class="toast-msg" id="toastMsg">Mensaje</div>
     <button class="toast-btn" id="toastBtn" onclick="closeToast()">Aceptar</button>
@@ -1018,8 +1027,16 @@ function cerrarBienvenida() {
 }
 
 /* ── TOAST ── */
-function showToast({ icon = '✅', title = '', msg = '', btnText = 'Aceptar', btnClass = '', cb = null } = {}) {
-  document.getElementById('toastIcon').textContent = icon;
+const TOAST_ICONS = {
+  success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>',
+  error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>'
+};
+function showToast({ icon = 'success', title = '', msg = '', btnText = 'Aceptar', btnClass = '', cb = null } = {}) {
+  const iconEl = document.getElementById('toastIcon');
+  iconEl.innerHTML = TOAST_ICONS[icon] || TOAST_ICONS.info;
+  iconEl.className = 'toast-icon ' + icon;
   document.getElementById('toastTitle').textContent = title;
   document.getElementById('toastMsg').textContent = msg;
   const btn = document.getElementById('toastBtn');
@@ -1256,16 +1273,16 @@ function updateScore() {
 /* ── ENVIAR ── */
 async function enviarEvaluacionEmail() {
   if (!contratoSeleccionado) {
-    showToast({ icon:'⚠️', title:'Contrato requerido', msg:'Selecciona un contrato primero.' }); return;
+    showToast({ icon:'warning', title:'Contrato requerido', msg:'Selecciona un contrato primero.' }); return;
   }
   const score = calcularTotal();
   if (score === null) {
-    showToast({ icon:'⚠️', title:'Calificación incompleta', msg:'Por favor califica al menos un criterio.' }); return;
+    showToast({ icon:'warning', title:'Calificación incompleta', msg:'Por favor califica al menos un criterio.' }); return;
   }
   const observaciones = document.getElementById('observaciones').value.trim();
   if (!observaciones) {
     showToast({ 
-      icon:'⚠️', 
+      icon:'warning', 
       title:'Observaciones requeridas', 
       msg:'Debes ingresar recomendaciones u observaciones antes de enviar la evaluación.' 
     }); 
@@ -1326,13 +1343,13 @@ async function enviarEvaluacionEmail() {
       throw new Error(errorData.error || 'Error enviando email');
     }
     showToast({
-      icon: '✅',
+      icon: 'success',
       title: 'Evaluación enviada',
       msg: 'La evaluación fue guardada y la notificación enviada correctamente.',
       cb: () => { resetForm(); cargarContratos(); }
     });
   } catch (err) {
-    showToast({ icon: '❌', title: 'Error al procesar', msg: err.message, btnClass: 'danger' });
+    showToast({ icon: 'error', title: 'Error al procesar', msg: err.message, btnClass: 'danger' });
   }
 }
 
@@ -1352,3 +1369,4 @@ window.onload = inicializar;
 </script>
 </body>
 </html>
+
