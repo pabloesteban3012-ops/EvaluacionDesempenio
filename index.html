@@ -1019,15 +1019,7 @@ function cerrarBienvenida() {
 
 /* ── TOAST ── */
 function showToast({ icon = '✅', title = '', msg = '', btnText = 'Aceptar', btnClass = '', cb = null } = {}) {
-  const iconEl = document.getElementById('toastIcon');
-  
-  // ✅ Si el icono empieza con '<', es HTML (imagen)
-  if (icon.trim().startsWith('<')) {
-    iconEl.innerHTML = icon;  // Renderiza HTML
-  } else {
-    iconEl.textContent = icon; // Muestra texto/emoji
-  }
-  
+  document.getElementById('toastIcon').textContent = icon;
   document.getElementById('toastTitle').textContent = title;
   document.getElementById('toastMsg').textContent = msg;
   const btn = document.getElementById('toastBtn');
@@ -1035,6 +1027,10 @@ function showToast({ icon = '✅', title = '', msg = '', btnText = 'Aceptar', bt
   btn.className = 'toast-btn' + (btnClass ? ' ' + btnClass : '');
   toastCallback = cb;
   document.getElementById('toastOverlay').classList.add('visible');
+}
+function closeToast() {
+  document.getElementById('toastOverlay').classList.remove('visible');
+  if (toastCallback) { toastCallback(); toastCallback = null; }
 }
 
 /* ── INIT ── */
