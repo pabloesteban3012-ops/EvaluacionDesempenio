@@ -544,6 +544,13 @@
     .header-title { display: none; }
     .main { padding: 20px 16px 110px; }
   }
+ .saludo-usuario {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.saludo-usuario span { color: var(--teal); }
 </style>
 <base target="_blank">
 </head>
@@ -650,7 +657,7 @@ La información recopilada servirá como insumo para fortalecer la gestión inte
     <div class="section-head"><div class="section-line"></div><div class="section-label">Seleccionar contrato</div></div>
     
     <div class="field-group">
-      <span class="user-info" id="userName"></span>
+      <div class="saludo-usuario" id="saludoUsuario"></div>
       <label>Seleccione el contrato u orden de compra</label>
       <select class="contrato-select" id="contratoSelect" onchange="seleccionarContrato()">
         <option value="">Seleccionar contrato...</option>
@@ -1067,6 +1074,10 @@ async function inicializar() {
 
     usuarioActual = await resp.json();
     document.getElementById('userName').textContent = usuarioActual.name || usuarioActual.email || 'Usuario';
+
+   const primerNombre = (usuarioActual.name || usuarioActual.email || 'Usuario').split(' ')[0];
+   document.getElementById('saludoUsuario').innerHTML =
+   `Hola, <span>${primerNombre}</span>, selecciona el contrato u orden a calificar`;
 
     mostrarBienvenida();
     await cargarContratos();
