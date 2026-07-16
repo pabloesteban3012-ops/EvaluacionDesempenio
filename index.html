@@ -1397,10 +1397,12 @@ async function logout() {
     }
   }
 
-window.onload = function(){
-   cargarUsuario();
-   inicializar();
- }
+window.onload = async function() {
+  await Promise.all([
+    cargarUsuario(),   // Esto SIEMPRE se ejecuta
+    inicializar()      // Esto también, pero no bloquea al otro
+  ]);
+};
 </script>
 </body>
 </html>
