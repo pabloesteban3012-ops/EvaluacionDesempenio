@@ -1075,9 +1075,9 @@ async function inicializar() {
     usuarioActual = await resp.json();
     document.getElementById('userName').textContent = usuarioActual.name || usuarioActual.email || 'Usuario';
 
-   const primerNombre = (usuarioActual.name || usuarioActual.email || 'Usuario').split(' ')[0];
+   const primerNombre = (usuarioActual.name || usuarioActual.email || 'Usuario');
    document.getElementById('saludoUsuario').innerHTML =
-   `Hola, <span>${primerNombre}</span>, selecciona el contrato u orden a calificar`;
+   `Hola <span>${primerNombre}</span>, selecciona en desplegable de abajo el contrato u orden a calificar`;
 
     mostrarBienvenida();
     await cargarContratos();
