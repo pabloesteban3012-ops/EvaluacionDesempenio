@@ -6,7 +6,7 @@
 <title>Evaluación de Desempeño — Aris Mining</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     --navy:       #0B1E34;
@@ -214,26 +214,40 @@
     grid-template-columns: 28px 1fr 64px 210px;
     gap: 12px;
     padding: 6px 14px 10px;
-    font-size: 10px; color: var(--text-dim);
-    text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;
+    font-size: 12px; color: var(--text);
+    text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700;
     border-bottom: 1px solid var(--border);
     margin-bottom: 8px;
   }
+  /* ★ tarjeta con más aire y esquinas redondeadas */
   .criterio-row {
     display: grid;
     grid-template-columns: 28px 1fr 64px 210px;
     gap: 12px; align-items: center;
-    padding: 13px 14px;
+    padding: 16px 18px;
     border: 1.5px solid var(--border);
-    border-radius: 9px;
-    margin-bottom: 6px;
+    border-radius: 14px;
+    margin-bottom: 10px;
     background: var(--bg3);
     transition: border-color 0.18s, background 0.18s;
   }
   .criterio-row:hover { border-color: var(--teal-border); background: #f5fafb; }
   .criterio-row.rated { background: rgba(27,140,168,0.06); border-color: var(--teal-border); }
   .criterio-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); text-align: center; }
-  .criterio-name { font-size: 15px; color: var(--text); font-weight: 700; }
+  /* ★ título grande en negrita + descripción debajo */
+  .criterio-name { display: flex; flex-direction: column; gap: 3px; }
+  .criterio-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.25;
+  }
+  .criterio-desc {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.45;
+    max-width: 520px;
+  }
   .criterio-pond { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--teal); text-align: center; font-weight: 500; }
 
   /* ── RATING BUTTONS ── */
@@ -543,14 +557,18 @@
     .header { padding: 0 16px; }
     .header-title { display: none; }
     .main { padding: 20px 16px 110px; }
+    /* ★ ocultar descripción en móvil para que no se apriete */
+    .criterio-desc { display: none; }
+    /* ★ título un poco más pequeño en móvil */
+    .criterio-title { font-size: 14px; }
   }
- .saludo-usuario {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--navy);
-  margin-bottom: 10px;
-}
-.saludo-usuario span { color: var(--teal); }
+  .saludo-usuario {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .saludo-usuario span { color: var(--teal); }
 </style>
 <base target="_blank">
 </head>
