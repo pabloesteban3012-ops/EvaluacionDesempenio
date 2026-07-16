@@ -1077,7 +1077,7 @@ async function inicializar() {
 
    const primerNombre = (usuarioActual.name || usuarioActual.email || 'Usuario');
    document.getElementById('saludoUsuario').innerHTML =
-   `Hola <span>${primerNombre}</span>, selecciona en desplegable de abajo el contrato u orden a calificar`;
+   `Hola <span>${primerNombre}</span>,seleccione a continuación el contrato u orden de compra a evaluar.`;
 
     mostrarBienvenida();
     await cargarContratos();
