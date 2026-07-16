@@ -1365,45 +1365,8 @@ async function logout() {
   try { await fetch('/api/logout'); } catch(e) {}
   window.location.href = '/login.html';
 }
- <script>
-  async function cargarUsuario() {
-    try {
-      const response = await fetch('/api/me');
-      
-      if (!response.ok) {
-        document.getElementById('userName').textContent = 'Invitado';
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (data.authenticated && data.name) {
-        // ✅ Saludo con el nombre que viene de me.js
-        const hora = new Date().getHours();
-        let saludo = 'Hola';
-        
-        if (hora >= 5 && hora < 12) saludo = 'Buenos días';
-        else if (hora >= 12 && hora < 18) saludo = 'Buenas tardes';
-        else saludo = 'Buenas noches';
-        
-        document.getElementById('userName').textContent = `${saludo}, ${data.name}`;
-      } else {
-        document.getElementById('userName').textContent = 'Invitado';
-      }
-      
-    } catch (error) {
-      console.error('Error:', error);
-      document.getElementById('userName').textContent = 'Invitado';
-    }
-  }
 
-</script>
-
-window.onload = function(){
-   cargarUsuario();
-   inicializar();
- }
+window.onload = inicializar;
 </script>
 </body>
 </html>
-
