@@ -1200,9 +1200,13 @@ function renderCriterios() {
       const sel = notaActual === v ? ` selected-${v}` : '';
       btns += `<button class="rating-btn${sel}" onclick="setNota('${c.nombre}',${v},${i})">${v}</button>`;
     }
+    const intro = DESCRIPCIONES[tipoActual]?.[c.nombre]?.intro || '';
     row.innerHTML = `
       <span class="criterio-num">${i+1}</span>
-      <span class="criterio-name">${c.nombre}</span>
+      <span class="criterio-name">
+        <span class="criterio-title">${c.nombre}</span>
+        ${intro ? `<span class="criterio-desc">${intro}</span>` : ''}
+      </span>
       <span class="criterio-pond">${c.pond}%</span>
       <div class="rating-btns">${btns}</div>
     `;
