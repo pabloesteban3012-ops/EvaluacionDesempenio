@@ -1169,7 +1169,7 @@ function ocultarFormulario() {
 function renderCriterios() {
   const criterios = TIPOS[tipoActual]?.criterios || [];
   document.getElementById('criteriosTitle').textContent =
-    `Criterios de evaluación — ${TIPOS[tipoActual]?.label || ''}`;
+    `Selecciona un número para conocer el significado de cada nota de cada criterio de evaluación — ${TIPOS[tipoActual]?.label || ''}`;
   const list = document.getElementById('criteriosList');
   list.innerHTML = '';
   criterios.forEach((c, i) => {
