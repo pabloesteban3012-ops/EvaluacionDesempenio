@@ -44,7 +44,6 @@ export default async function handler(req, res) {
       jobTitle: me.jobTitle || "Sin cargo",
       companyName: me.companyName || ""
     },
-    access_token: tokenData.access_token,
     time: Date.now()
   })).toString("base64")
   const isProd = process.env.VERCEL_ENV === "production"
