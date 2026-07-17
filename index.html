@@ -1097,7 +1097,7 @@ async function inicializar() {
     const { data: esComp } = await supabaseClient
       .from('evaluadores_complementarios')
       .select('correo')
-      .eq('correo', usuarioActual.email)
+      .ilike('correo', usuarioActual.email)   // ilike = insensible a mayúsculas
       .maybeSingle();
     if (esComp) { window.location.href = '/complemento.html'; return; }
 
