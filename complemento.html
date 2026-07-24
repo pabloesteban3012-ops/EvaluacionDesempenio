@@ -924,7 +924,7 @@ async function inicializar() {
       .maybeSingle();
     if (!esComp) { window.location.href = '/index.html'; return; }
 
-    const primerNombre = (usuarioActual.name || usuarioActual.email || 'Usuario').split(' ')[0];
+    const primerNombre = (usuarioActual.name || usuarioActual.email || 'Usuario');
     document.getElementById('saludoUsuario').innerHTML =
       `Hola, <span>${primerNombre}</span>, selecciona la orden de compra a complementar`;
 
