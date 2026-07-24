@@ -185,9 +185,8 @@
     line-height: 1.7;
   }
 
-  /* ── RESUMEN EVALUACIÓN ADMIN (OCULTO AL CALIFICADOR) ── */
+  /* ── RESUMEN EVALUACIÓN ADMIN ── */
   .admin-summary {
-    display: none !important;
     margin-top: 12px; padding: 14px 16px;
     background: var(--bg3);
     border: 1px solid var(--border);
@@ -268,10 +267,9 @@
   }
   .criterio-pond { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--teal); text-align: center; font-weight: 500; }
 
-  /* ── BADGE NOTA DEL ADMINISTRADOR (OCULTO AL CALIFICADOR) ── */
+  /* ── BADGE NOTA DEL ADMINISTRADOR ── */
   .admin-badge {
-    display: none !important;
-    margin-left: 8px;
+    display: inline-block; margin-left: 8px;
     font-size: 10px; font-weight: 600;
     background: var(--bg4); color: var(--text-muted);
     border-radius: 6px; padding: 2px 8px;
@@ -630,8 +628,8 @@
         <div class="welcome-step">
           <div class="welcome-step-num">2</div>
           <div class="welcome-step-text">
-            <strong>Evalúa de forma independiente</strong>
-            Califica cada criterio según tu propio criterio. La nota del administrador del contrato no se muestra para no condicionar tu evaluación.
+            <strong>Revisa la calificación previa</strong>
+            Junto a cada criterio verás la nota que asignó el administrador del contrato.
           </div>
         </div>
         <div class="welcome-step">
@@ -765,12 +763,12 @@
   <div class="score-bar-wrap">
     <div class="score-bar" id="scoreBar" style="width:0%"></div>
   </div>
-  <div style="display:none;">
+  <div>
     <div class="score-label">Promedio final</div>
     <div class="score-value" id="scoreFinal" style="font-size:22px;">—</div>
   </div>
-  <div class="concepto-badge badge-C" id="conceptoBadge" style="opacity:0; display:none;">MUY DEFICIENTE</div>
-  <div class="tipo-badge badge-C" id="tipoBadge" style="opacity:0; display:none;">E</div>
+  <div class="concepto-badge badge-C" id="conceptoBadge" style="opacity:0">MUY DEFICIENTE</div>
+  <div class="tipo-badge badge-C" id="tipoBadge" style="opacity:0">E</div>
   <span class="score-hint">5 = Excelente · 1 = Muy deficiente</span>
 </div>
 
