@@ -935,16 +935,6 @@ const DESCRIPCIONES = {
     }
   },
   'F-COM-008': {
-    'Condiciones comerciales': {
-      intro: 'Este criterio evalúa el cumplimiento de las condiciones comerciales pactadas.',
-      niveles: {
-        5: 'El proveedor cumple estrictamente con todas las condiciones comerciales pactadas: precio, descuentos, forma de pago y demás condiciones del contrato u orden de compra.',
-        4: 'El proveedor cumple generalmente con las condiciones comerciales pactadas. Puede presentar situaciones menores que son resueltas oportunamente.',
-        3: 'El proveedor cumple con las condiciones comerciales mínimas, aunque puede presentar algunas desviaciones que son corregidas cuando se le indican.',
-        2: 'El proveedor cumple irregularmente con las condiciones comerciales pactadas, requiriendo intervención del administrador del contrato.',
-        1: 'El proveedor no cumple con las condiciones comerciales pactadas, generando perjuicios para la organización.'
-      }
-    },
     'Calidad': {
       intro: 'Se refiere a la calidad de los bienes entregados por el proveedor.',
       niveles: {
@@ -963,16 +953,6 @@ const DESCRIPCIONES = {
         3: 'El proveedor cumple con los plazos de entrega y completitud mínimos requeridos. Puede presentar ocasionalmente retrasos o entregas parciales que logra compensar. Cumplimiento entre el 70% y el 79,9%.',
         2: 'El proveedor presenta irregularidades en la entrega oportuna y completa de los bienes. Requiere control intenso por parte del administrador. Cumplimiento entre el 60% y el 69,9%.',
         1: 'El proveedor no cumple con la entrega oportuna y completa de los bienes. Cumplimiento inferior al 60%.'
-      }
-    },
-    'Servicio post-venta': {
-      intro: 'Este criterio evalúa la calidad del servicio post-venta ofrecido por el proveedor.',
-      niveles: {
-        5: 'El proveedor ofrece un servicio post-venta excelente. Atiende de forma inmediata y efectiva todas las reclamaciones, garantías y solicitudes de soporte técnico.',
-        4: 'El proveedor ofrece un buen servicio post-venta. Atiende oportunamente las reclamaciones y garantías, aunque puede presentar demoras menores.',
-        3: 'El proveedor ofrece un servicio post-venta aceptable. Atiende las reclamaciones y garantías cuando se le requiere, aunque con demoras.',
-        2: 'El proveedor ofrece un servicio post-venta deficiente. Presenta dificultades para atender reclamaciones y garantías, requiriendo insistencia del administrador.',
-        1: 'El proveedor no ofrece servicio post-venta adecuado. No atiende oportunamente las reclamaciones, garantías ni solicitudes de soporte técnico.'
       }
     },
     'Documentación': {
@@ -1017,10 +997,8 @@ const TIPOS = {
   'F-COM-008': {
     label: 'Bienes',
     criterios: [
-      { nombre: 'Condiciones comerciales', pond: 10 },
       { nombre: 'Calidad', pond: 35 },
       { nombre: 'Oportunidad y completitud', pond: 35 },
-      { nombre: 'Servicio post-venta', pond: 10 },
       { nombre: 'Documentación', pond: 10 },
     ]
   }
