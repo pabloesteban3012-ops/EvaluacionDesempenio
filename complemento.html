@@ -792,26 +792,6 @@ const DESCRIPCIONES = {
         1: 'El proveedor no cumple con las condiciones comerciales pactadas, generando perjuicios para la organización.'
       }
     },
-    'Calidad': {
-      intro: 'Se refiere a la calidad de los bienes entregados por el proveedor.',
-      niveles: {
-        5: 'Los bienes suministrados cumplen al 100% con las especificaciones técnicas y estándares de calidad requeridos. No presenta no-conformidades. Cumple entre el 90% y el 100% con los KPI´s de Calidad del contrato u orden (si existen).',
-        4: 'Los bienes suministrados cumplen razonablemente con las especificaciones técnicas requeridas. Pueden haber falencias menores, de fácil corrección. Cumplimiento entre el 80% y el 89,9% con los KPI´s de Calidad.',
-        3: 'Los bienes suministrados cumplen con los niveles mínimos de calidad, aunque se presentan algunas desviaciones que son corregidas. Cumplimiento entre el 70% y el 79,9% con los KPI´s de Calidad.',
-        2: 'La calidad de los bienes suministrados es deficiente. No cumple con el mínimo solicitado. Cumplimiento entre el 60% y el 69,9% con los KPI´s de Calidad.',
-        1: 'No cumple. Cumplimiento inferior al 60% en los KPI´s de Calidad del contrato u orden (si existen).'
-      }
-    },
-    'Oportunidad y completitud': {
-      intro: 'Este criterio evalúa la entrega oportuna y completa de los bienes solicitados.',
-      niveles: {
-        5: 'El proveedor entrega los bienes de forma completa y en los plazos acordados. No presenta entregas parciales no autorizadas ni retrasos. Cumple entre el 90% y el 100% con los KPI´s de Oportunidad.',
-        4: 'El proveedor entrega los bienes de forma usualmente completa y en los plazos acordados. Puede presentar retrasos o entregas parciales menores que corrige espontáneamente. Cumplimiento entre el 80% y el 89,9%.',
-        3: 'El proveedor cumple con los plazos de entrega y completitud mínimos requeridos. Puede presentar ocasionalmente retrasos o entregas parciales que logra compensar. Cumplimiento entre el 70% y el 79,9%.',
-        2: 'El proveedor presenta irregularidades en la entrega oportuna y completa de los bienes. Requiere control intenso por parte del administrador. Cumplimiento entre el 60% y el 69,9%.',
-        1: 'El proveedor no cumple con la entrega oportuna y completa de los bienes. Cumplimiento inferior al 60%.'
-      }
-    },
     'Servicio post-venta': {
       intro: 'Este criterio evalúa la calidad del servicio post-venta ofrecido por el proveedor.',
       niveles: {
@@ -820,16 +800,6 @@ const DESCRIPCIONES = {
         3: 'El proveedor ofrece un servicio post-venta aceptable. Atiende las reclamaciones y garantías cuando se le requiere, aunque con demoras.',
         2: 'El proveedor ofrece un servicio post-venta deficiente. Presenta dificultades para atender reclamaciones y garantías, requiriendo insistencia del administrador.',
         1: 'El proveedor no ofrece servicio post-venta adecuado. No atiende oportunamente las reclamaciones, garantías ni solicitudes de soporte técnico.'
-      }
-    },
-    'Documentación': {
-      intro: 'Este criterio evalúa la calidad y oportunidad de la documentación entregada con los bienes.',
-      niveles: {
-        5: 'El proveedor entrega siempre de forma oportuna y completa toda la documentación requerida (fichas técnicas, certificados de calidad, remisiones, facturas, garantías, manuales, entre otros).',
-        4: 'El proveedor entrega generalmente de forma oportuna y completa la documentación requerida. Puede presentar omisiones menores que corrige espontáneamente.',
-        3: 'El proveedor entrega la documentación mínima requerida, aunque puede presentar omisiones o retrasos que corrige cuando se le indica.',
-        2: 'El proveedor entrega la documentación de forma irregular, presentando omisiones o retrasos que requieren intervención del administrador.',
-        1: 'El proveedor no entrega la documentación requerida de forma oportuna y completa, afectando los procesos de la organización.'
       }
     }
   }
@@ -840,10 +810,7 @@ const TIPOS = {
     label: 'Bienes',
     criterios: [
       { nombre: 'Condiciones comerciales', pond: 10 },
-      { nombre: 'Calidad', pond: 35 },
-      { nombre: 'Oportunidad y completitud', pond: 35 },
       { nombre: 'Servicio post-venta', pond: 10 },
-      { nombre: 'Documentación', pond: 10 },
     ]
   }
 };
