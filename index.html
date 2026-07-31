@@ -436,6 +436,8 @@
   .welcome-objective p {
     font-size: 14px; color: var(--text);
     line-height: 1.7; font-weight: 400;
+    text-align: justify;
+    hyphens: auto;
   }
   .welcome-steps {
     display: grid; grid-template-columns: 1fr 1fr;
@@ -486,6 +488,7 @@
     .welcome-steps { grid-template-columns: 1fr; }
     .welcome-modal-icon { display: none; }
     .welcome-modal-title { font-size: 18px; }
+    .welcome-objective p { text-align: left; }
   }
   .criterio-desc-panel {
     position: fixed;
