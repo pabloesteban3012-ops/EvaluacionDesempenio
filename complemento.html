@@ -1101,6 +1101,23 @@ function calcularTotal() {
   return Math.round((weightedSum / totalPond) * 100) / 100;
 }
 
+// Nota final REAL: suma de los puntajes ponderados de los 5 criterios (base 100).
+// No es promedio simple: respeta que admin pesa 80 (35+35+10) y Compras 20 (10+10).
+function calcularNotaFinal() {
+  const admin = evalPrevia?.criterios || [];
+  const compras = TIPOS[tipoActual]?.criterios || [];
+  let suma = 0;
+  admin.forEach(c => {
+    if (c.puntaje != null) suma += Number(c.puntaje);
+    else if (c.calificacion != null && c.ponderacion != null) suma += c.calificacion * c.ponderacion / 100;
+  });
+  compras.forEach(c => {
+    const n = notas[c.nombre];
+    if (n != null) suma += n * c.pond / 100;
+  });
+  return Math.round(suma * 100) / 100;
+}
+
 function getConcepto(score) {
   if (score === null || score < 0) return null;
   for (const r of RANGOS) if (score >= r.min && score <= r.max) return r;
@@ -1126,9 +1143,9 @@ function updateScore() {
   numEl.textContent = score.toFixed(2); numEl.className = `score-value state-${res.tipo}`;
   barEl.style.width = pct.toFixed(1) + '%'; barEl.className = `score-bar bar-${res.tipo}`;
 
-  // Promedio final con la nota del administrador
+  // Nota final ponderada real (suma de puntajes de los 5 criterios)
   if (evalPrevia && evalPrevia.calificacion_total != null) {
-    const notaFinal = (Number(evalPrevia.calificacion_total) + score) / 2;
+    const notaFinal = calcularNotaFinal();
     const resFin = getConcepto(notaFinal);
     finEl.textContent = notaFinal.toFixed(2);
     finEl.className = `score-value state-${resFin.tipo}`;
@@ -1156,7 +1173,7 @@ async function enviarEvaluacionEmail() {
     return;
   }
 
-  const notaFinal = Number(((Number(evalPrevia.calificacion_total) + score) / 2).toFixed(2));
+  const notaFinal = calcularNotaFinal();
   const resFinal = getConcepto(notaFinal);
   const resCompras = getConcepto(score);
 
