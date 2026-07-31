@@ -1356,6 +1356,7 @@ async function enviarEvaluacionEmail() {
       evaluador_email: usuarioActual.email,
       evaluador_nombre: usuarioActual.name || usuarioActual.email,
       evaluador_cargo: usuarioActual.jobTitle || ''
+      evaluador_departamento: usuarioActual.department || ''
     }]).select();
     if (error) throw error;
     await supabaseClient.from('asignaciones')
