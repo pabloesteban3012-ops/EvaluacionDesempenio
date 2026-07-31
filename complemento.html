@@ -1170,6 +1170,12 @@ async function enviarEvaluacionEmail() {
     }
   });
 
+  // Los 5 criterios juntos (3 del admin + 2 de Compras) para la tabla del documento
+  const criteriosConsolidados = [
+    ...(evalPrevia.criterios || []),
+    ...criteriosArray
+  ];
+
   const datosPA = {
     id: evalPrevia.id,                 // mismo id de la evaluación original (correo #1)
     esComplemento: true,
@@ -1181,7 +1187,9 @@ async function enviarEvaluacionEmail() {
       cargo: usuarioActual.jobTitle || ''
     },
     evaluadorAdministrador: {
-      email: evalPrevia.evaluador_email || ''
+      email: evalPrevia.evaluador_email || '',
+      nombre: evalPrevia.evaluador_nombre || '',
+      cargo: evalPrevia.evaluador_cargo || ''
     },
     proveedor: {
       razonSocial: contratoSeleccionado.razon_social,
@@ -1195,7 +1203,8 @@ async function enviarEvaluacionEmail() {
       periodo: contratoSeleccionado.periodo_evaluacion || ''
     },
     resultados: {
-      criterios: criteriosArray,
+      criterios: criteriosConsolidados,
+      criteriosCompras: criteriosArray,
       criteriosAdministrador: evalPrevia.criterios || [],
       calificacionAdministrador: Number(evalPrevia.calificacion_total),
       calificacionCompras: Number(score.toFixed(2)),
