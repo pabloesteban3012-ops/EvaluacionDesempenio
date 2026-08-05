@@ -793,6 +793,16 @@ const DESCRIPCIONES = {
         1: 'El proveedor no cumple con las condiciones comerciales pactadas, generando perjuicios para la organización.'
       }
     },
+    'Oportunidad y completitud': {
+      intro: 'Este criterio evalúa la entrega oportuna y completa de los bienes solicitados.',
+      niveles: {
+        5: 'El proveedor entrega los bienes de forma completa y en los plazos acordados. No presenta entregas parciales no autorizadas ni retrasos. Cumple entre el 90% y el 100% con los KPI´s de Oportunidad.',
+        4: 'El proveedor entrega los bienes de forma usualmente completa y en los plazos acordados. Puede presentar retrasos o entregas parciales menores que corrige espontáneamente. Cumplimiento entre el 80% y el 89,9%.',
+        3: 'El proveedor cumple con los plazos de entrega y completitud mínimos requeridos. Puede presentar ocasionalmente retrasos o entregas parciales que logra compensar. Cumplimiento entre el 70% y el 79,9%.',
+        2: 'El proveedor presenta irregularidades en la entrega oportuna y completa de los bienes. Requiere control intenso por parte del administrador. Cumplimiento entre el 60% y el 69,9%.',
+        1: 'El proveedor no cumple con la entrega oportuna y completa de los bienes. Cumplimiento inferior al 60%.'
+      }
+    },
     'Servicio post-venta': {
       intro: 'Este criterio evalúa la calidad del servicio post-venta ofrecido por el proveedor.',
       niveles: {
@@ -811,6 +821,7 @@ const TIPOS = {
     label: 'Bienes',
     criterios: [
       { nombre: 'Condiciones comerciales', pond: 10 },
+      { nombre: 'Oportunidad y completitud', pond: 35 },
       { nombre: 'Servicio post-venta', pond: 10 },
     ]
   }
@@ -1295,3 +1306,4 @@ window.onload = inicializar;
 </script>
 </body>
 </html>
+
