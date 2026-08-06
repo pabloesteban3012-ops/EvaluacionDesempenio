@@ -72,7 +72,7 @@ export default async function handler(req, res) {
       : 'Nueva evaluación de proveedor completada.';
     await transporter.sendMail({
       from: `"Evaluación Proveedores Aris Mining" <${process.env.MAIL_USER}>`,
-      to: 'pablo.alzate@aris-mining.co',
+      to: 'gestion.proveedores@aris-mining.co',
       subject: subject,
       html: `
         <p>${intro}</p>
