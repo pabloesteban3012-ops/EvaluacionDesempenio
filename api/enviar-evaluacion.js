@@ -1,11 +1,5 @@
 import nodemailer from 'nodemailer';
 
-// Cliente de Supabase (usa las variables de entorno del proyecto)
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
@@ -16,23 +10,35 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Faltan datosPA' });
     }
 
-    // ── Completar el 'objeto' (área) del contrato desde Supabase ──
-    // Si no vino en datosPA, lo buscamos por el código del contrato.
+    // ── Completar el 'objeto' (área) del contrato desde Supabase vía REST ──
+    // Usa fetch directo (sin dependencias) y va dentro de su propio try:
+    // si falla, el objeto no se agrega pero el correo se envía igual.
     if (datosPA.contrato && !datosPA.contrato.objeto && datosPA.contrato.codigo) {
       try {
-        const { data: contratoDB, error: errContrato } = await supabase
-          .from('contratos')
-          .select('objeto')
-          .eq('numero_contrato', datosPA.contrato.codigo)
-          .maybeSingle();
-
-        if (errContrato) {
-          console.error('Error consultando objeto del contrato:', errContrato.message);
-        } else if (contratoDB && contratoDB.objeto) {
-          datosPA.contrato.objeto = contratoDB.objeto;
-          console.log('Objeto del contrato agregado:', contratoDB.objeto);
+        const SUPA_URL = process.env.SUPABASE_URL;
+        const SUPA_KEY = process.env.SUPABASE_KEY;
+        if (SUPA_URL && SUPA_KEY) {
+          const codigo = encodeURIComponent(datosPA.contrato.codigo);
+          const url = `${SUPA_URL}/rest/v1/contratos?numero_contrato=eq.${codigo}&select=objeto`;
+          const r = await fetch(url, {
+            headers: {
+              apikey: SUPA_KEY,
+              Authorization: `Bearer ${SUPA_KEY}`
+            }
+          });
+          if (r.ok) {
+            const filas = await r.json();
+            if (Array.isArray(filas) && filas[0] && filas[0].objeto) {
+              datosPA.contrato.objeto = filas[0].objeto;
+              console.log('Objeto del contrato agregado:', filas[0].objeto);
+            } else {
+              console.warn('No se encontró objeto para el contrato:', datosPA.contrato.codigo);
+            }
+          } else {
+            console.error('Supabase respondió con estado:', r.status);
+          }
         } else {
-          console.warn('No se encontró objeto para el contrato:', datosPA.contrato.codigo);
+          console.warn('Faltan SUPABASE_URL / SUPABASE_KEY; se omite la búsqueda del objeto.');
         }
       } catch (e) {
         console.error('Fallo al obtener objeto del contrato:', e.message);
