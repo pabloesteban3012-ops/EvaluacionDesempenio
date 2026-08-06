@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import { createClient } from '@supabase/supabase-js';
 
 // Cliente de Supabase (usa las variables de entorno del proyecto)
 const supabase = createClient(
