@@ -1359,7 +1359,7 @@ async function enviarEvaluacionEmail() {
     });
     if (!emailResponse.ok) {
       const errorData = await emailResponse.json();
-      throw new Error(errorData.error || 'Error enviando email');
+      throw new Error(errorData.error || 'Error enviando evaluación');
     }
     showToast({
       icon: 'success',
