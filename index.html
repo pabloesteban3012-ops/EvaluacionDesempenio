@@ -1099,7 +1099,7 @@ async function cargarContratos() {
   try {
     const { data, error } = await supabaseClient
       .from('v_mis_contratos').select('*')
-      .eq('correo_evaluador', correo)
+      .ilike('correo_evaluador', correo)
       .eq('estado_asignacion', 'pendiente')
       .eq('orden', 1);
     if (error) throw error;
