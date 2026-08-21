@@ -387,11 +387,16 @@
     background: var(--bg2);
     border-radius: 16px;
     width: 100%; max-width: 680px;
+    max-height: calc(100vh - 40px);
+    display: flex; flex-direction: column;
     overflow: hidden;
     box-shadow: 0 24px 80px rgba(11,30,52,0.30);
     transform: translateY(16px) scale(0.98);
     transition: transform 0.35s;
   }
+  .welcome-modal-header { flex-shrink: 0; }
+  .welcome-modal-body { flex: 1 1 auto; overflow-y: auto; }
+  .welcome-modal-footer { flex-shrink: 0; }
   .welcome-overlay.visible .welcome-modal { transform: translateY(0) scale(1); }
   .welcome-modal-header {
     background: var(--navy);
@@ -482,6 +487,8 @@
   .btn-welcome-accept:active { transform: scale(0.98); }
 
   @media (max-width: 600px) {
+    .welcome-overlay { padding: 12px; }
+    .welcome-modal { max-height: calc(100vh - 24px); }
     .welcome-modal-header { padding: 22px 22px 18px; }
     .welcome-modal-body { padding: 22px 22px 0; }
     .welcome-modal-footer { padding: 20px 22px 22px; flex-direction: column; align-items: stretch; }
@@ -1388,3 +1395,4 @@ window.onload = inicializar;
 </script>
 </body>
 </html>
+
