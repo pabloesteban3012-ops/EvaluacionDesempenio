@@ -1,6 +1,10 @@
 {
+  "redirects": [
+    { "source": "/login.html", "destination": "/", "permanent": false },
+    { "source": "/complemento.html", "destination": "/", "permanent": false }
+  ],
   "rewrites": [
-    { "source": "/", "destination": "/login.html" }
+    { "source": "/", "destination": "/index.html" }
   ],
   "functions": {
     "api/guardar.js": {
