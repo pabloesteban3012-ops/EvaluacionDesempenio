@@ -4,46 +4,104 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="robots" content="noindex, nofollow"/>
-<title>Acceso no disponible — Evaluación de Desempeño</title>
+<title>Evaluación finalizada — Aris Mining</title>
 <style>
-  :root { --navy:#0B1E34; --teal:#1B8CA8; --bg:#f4f7fa; --text:#1f2d3d; --muted:#5b6b7b; }
+  :root { --navy:#0B1E34; --navy2:#12304f; --teal:#1B8CA8; --ok:#1f9d6b; --bg:#eef3f7; --text:#1f2d3d; --muted:#5b6b7b; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body {
-    min-height:100vh; display:flex; align-items:center; justify-content:center;
-    padding:24px; background:var(--bg); color:var(--text);
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+    background:
+      radial-gradient(900px 500px at 10% -10%, rgba(27,140,168,.18), transparent 60%),
+      radial-gradient(700px 500px at 110% 110%, rgba(11,30,52,.12), transparent 60%),
+      var(--bg);
+    color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   }
   .card {
-    width:100%; max-width:480px; background:#fff; border-radius:14px; overflow:hidden;
-    box-shadow:0 10px 30px rgba(11,30,52,.12); text-align:center;
+    width:100%; max-width:540px; background:#fff; border-radius:18px; overflow:hidden;
+    box-shadow:0 20px 50px rgba(11,30,52,.16); text-align:center;
+    animation:rise .6s ease both;
   }
-  .bar { background:var(--navy); padding:20px; color:#fff; font-weight:600; letter-spacing:.3px; }
-  .bar span { color:var(--teal); }
-  .body { padding:36px 28px 32px; }
-  .icon {
-    width:72px; height:72px; margin:0 auto 20px; border-radius:50%;
-    background:rgba(27,140,168,.12); display:flex; align-items:center; justify-content:center;
+  @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  .head {
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+    padding:30px 24px 52px; color:#fff;
   }
-  h1 { font-size:22px; color:var(--navy); margin-bottom:12px; }
-  p { font-size:15px; line-height:1.6; color:var(--muted); }
-  .foot { padding:14px; font-size:12px; color:var(--muted); border-top:1px solid #e6ecf1; }
+  .brand { font-size:13px; letter-spacing:2px; text-transform:uppercase; opacity:.85; }
+  .brand b { color:#6fd0e6; font-weight:700; }
+  .head h2 { margin-top:10px; font-size:15px; font-weight:500; opacity:.9; }
+  .badge {
+    width:92px; height:92px; margin:-46px auto 0; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 22px rgba(11,30,52,.18); position:relative;
+  }
+  .badge::after {
+    content:""; position:absolute; inset:8px; border-radius:50%;
+    background:rgba(31,157,107,.12);
+  }
+  .badge svg { position:relative; z-index:1; }
+  .check { stroke-dasharray:30; stroke-dashoffset:30; animation:draw .7s .5s ease forwards; }
+  @keyframes draw { to { stroke-dashoffset:0; } }
+  .body { padding:26px 30px 8px; }
+  h1 { font-size:26px; color:var(--navy); margin-bottom:12px; line-height:1.25; }
+  .lead { font-size:16px; line-height:1.65; color:var(--muted); }
+  .list { margin:26px 0 6px; display:grid; gap:10px; text-align:left; }
+  .item {
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:14px 16px; border:1px solid #e3eaf0; border-radius:12px; background:#f9fbfd;
+  }
+  .item strong { display:block; font-size:14px; color:var(--navy); }
+  .item small { font-size:12.5px; color:var(--muted); }
+  .chip {
+    flex:none; font-size:12px; font-weight:600; color:var(--ok);
+    background:rgba(31,157,107,.12); padding:6px 12px; border-radius:999px;
+  }
+  .note { margin:22px 0 28px; font-size:14px; line-height:1.6; color:var(--muted); }
+  .foot { padding:16px; font-size:12px; color:#7a8896; border-top:1px solid #e6ecf1; background:#fbfcfd; }
+  @media (max-width:480px) {
+    .body { padding:22px 18px 4px; } h1 { font-size:22px; }
+    .item { flex-direction:column; align-items:flex-start; }
+  }
 </style>
 </head>
 <body>
   <main class="card" role="main">
-    <div class="bar">Aris <span>Mining</span> · Evaluación de Desempeño</div>
-    <div class="body">
-      <div class="icon" aria-hidden="true">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1B8CA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="11" width="16" height="10" rx="2"/>
-          <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-        </svg>
-      </div>
-      <h1>Acceso no disponible</h1>
-      <p>El acceso a la plataforma de Evaluación de Desempeño de proveedores se encuentra deshabilitado temporalmente.</p>
-      <p style="margin-top:12px">Si necesitas ingresar, comunícate con el área de Tecnología.</p>
+    <div class="head">
+      <div class="brand">Aris <b>Mining</b></div>
+      <h2>Evaluación de Desempeño de Proveedores</h2>
     </div>
-    <div class="foot">Evaluación de Desempeño</div>
+
+    <div class="badge" aria-hidden="true">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#1f9d6b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path class="check" d="M5 12.5l4.5 4.5L19 7.5"/>
+      </svg>
+    </div>
+
+    <div class="body">
+      <h1>La evaluación de este periodo ha finalizado</h1>
+      <p class="lead">Gracias por tu participación. El periodo de calificación ya cerró y la plataforma no admite nuevos registros ni modificaciones.</p>
+
+      <div class="list">
+        <div class="item">
+          <div>
+            <strong>Evaluación del contrato</strong>
+            <small>Administradores de contrato</small>
+          </div>
+          <span class="chip">Finalizada</span>
+        </div>
+        <div class="item">
+          <div>
+            <strong>Calificación complementaria</strong>
+            <small>Área de Compras</small>
+          </div>
+          <span class="chip">Finalizada</span>
+        </div>
+      </div>
+
+      <p class="note">Te avisaremos cuando se habilite el siguiente periodo. Si tienes dudas, comunícate con el área de Tecnología.</p>
+    </div>
+
+    <div class="foot">Evaluación de Desempeño · Aris Mining</div>
   </main>
 </body>
 </html>
